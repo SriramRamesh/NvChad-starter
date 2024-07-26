@@ -1,4 +1,4 @@
--- This file needs to have same structure as nvconfig.lua 
+-- This file needs to have same structure as nvconfig.lua
 -- https://github.com/NvChad/ui/blob/v2.5/lua/nvconfig.lua
 
 ---@type ChadrcConfig
@@ -11,13 +11,24 @@ M.ui = {
     -- this will use the black color from nvchad theme & lighten it by 2x
     -- use a negative number to darken it
     Visual = {
-      bg = {"one_bg3", 2}
+      bg = { "one_bg3", 2 }
     },
+    -- Normal = {
+    --   bg = { "one_bg3", 1 }
+    -- },
     Comment = { italic = true },
     ["@comment"] = { italic = true },
     -- MyHighlightGroup = { -- custom highlights are also allowed
     --   fg = "red",
     --   bg = "darker_black"
+    -- }
+    -- LspReferenceWrite = {
+    --   -- underline = true,
+    --   -- bg = "#5c6370",
+    --   bg = "lightbg",
+    -- },
+    -- LspReferenceText = {
+    --   bg = { "one_bg3", 2 },
     -- }
   },
 }
