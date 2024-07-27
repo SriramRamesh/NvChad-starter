@@ -1,11 +1,12 @@
 -- Example for configuring Neovim to load user-installed installed Lua rocks:
-package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?/init.lua"
-package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?.lua"
+package.path = package.path .. ";" .. vim.fn.expand "$HOME" .. "/.luarocks/share/lua/5.1/?/init.lua"
+package.path = package.path .. ";" .. vim.fn.expand "$HOME" .. "/.luarocks/share/lua/5.1/?.lua"
 -- /Users/sriram/.luarocks
+--
 return {
   {
     "stevearc/conform.nvim",
-    event = 'BufWritePre', -- uncomment for format on save
+    event = "BufWritePre", -- uncomment for format on save
     config = function()
       require "configs.conform"
     end,
@@ -37,10 +38,10 @@ return {
         "SmiteshP/nvim-navbuddy",
         dependencies = {
           "SmiteshP/nvim-navic",
-          "MunifTanjim/nui.nvim"
+          "MunifTanjim/nui.nvim",
         },
-        opts = { lsp = { auto_attach = true } }
-      }
+        opts = { lsp = { auto_attach = true } },
+      },
     },
     config = function()
       require("nvchad.configs.lspconfig").defaults()
@@ -98,16 +99,16 @@ return {
           scope_incremental = false,
           node_decremental = "<bs>",
         },
-      }
+      },
     },
   },
   {
-    'goolord/alpha-nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    "goolord/alpha-nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
     lazy = false,
     config = function()
-      require 'configs.alpha'
-    end
+      require "configs.alpha"
+    end,
   },
   -- { 'echasnovski/mini.jump',
   --   version = false,
@@ -132,17 +133,17 @@ return {
     config = function()
       require "configs.flash"
     end
-
+    ,
   },
   {
     "kylechui/nvim-surround",
     version = "*", -- Use for stability; omit to use `main` branch for the latest features
     event = "VeryLazy",
     config = function()
-      require("nvim-surround").setup({
+      require("nvim-surround").setup {
         -- Configuration here, or leave empty to use defaults
-      })
-    end
+      }
+    end,
   },
   {
     "nvim-telescope/telescope.nvim",
@@ -168,7 +169,7 @@ return {
     cmd = "FzfLua",
     config = function()
       require "configs.fzflua"
-    end
+    end,
   },
   {
     "NeogitOrg/neogit",
@@ -184,23 +185,23 @@ return {
       require "configs.neogit"
     end,
     keys = {
-      { "<leader>gg", "<cmd>Neogit<cr>", desc = "LazyGit" }
-    }
+      { "<leader>gg", "<cmd>Neogit<cr>", desc = "LazyGit" },
+    },
   },
   {
-    'ruifm/gitlinker.nvim',
+    "ruifm/gitlinker.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
     cmd = "Gitlinker",
     config = function()
-      require "gitlinker".setup({})
-    end
+      require("gitlinker").setup {}
+    end,
   },
   {
     "folke/trouble.nvim",
     opts = {
       keys = {
-        ["<tab>"] = "fold_toggle"
-      }
+        ["<tab>"] = "fold_toggle",
+      },
     }, -- for default options, refer to the configuration section for custom setup.
     cmd = "Trouble",
     keys = {
@@ -237,15 +238,14 @@ return {
     },
     config = function()
       require "configs.trouble"
-    end
-
+    end,
   },
   {
     "AckslD/nvim-neoclip.lua",
     dependencies = {
       -- you'll need at least one of these
       -- {'nvim-telescope/telescope.nvim'},
-      'ibhagwan/fzf-lua',
+      "ibhagwan/fzf-lua",
     },
     config = function()
       require "configs.neoclip"
@@ -255,13 +255,15 @@ return {
     "ray-x/lsp_signature.nvim",
     event = "VeryLazy",
     opts = {},
-    config = function(_, opts) require 'lsp_signature'.setup(opts) end
+    config = function(_, opts)
+      require("lsp_signature").setup(opts)
+    end,
   },
   {
-    'numToStr/Comment.nvim',
+    "numToStr/Comment.nvim",
     opts = {
       -- add any options here
-    }
+    },
   },
   {
     "SmiteshP/nvim-navbuddy",
@@ -270,14 +272,14 @@ return {
     end,
   },
   {
-    'ray-x/navigator.lua',
+    "ray-x/navigator.lua",
     dependencies = {
-      { 'ray-x/guihua.lua',     build = "cd lua/fzy && make" },
-      { 'neovim/nvim-lspconfig' },
+      { "ray-x/guihua.lua",     build = "cd lua/fzy && make" },
+      { "neovim/nvim-lspconfig" },
     },
-    config = function ()
+    config = function()
       require "configs.navigator"
-    end
+    end,
   },
   {
     "benlubas/molten-nvim",
@@ -293,15 +295,15 @@ return {
     "3rd/image.nvim",
     config = function()
       require "configs.image"
-    end
+    end,
   },
   {
-    'willothy/wezterm.nvim',
-    config = true
+    "willothy/wezterm.nvim",
+    config = true,
   },
   {
     "Olical/conjure",
-    cmd = 'ConjureSchool',
+    cmd = "ConjureSchool",
     config = function()
       -- Disable the documentation mapping
       vim.g["conjure#mapping#doc_word"] = false
@@ -311,6 +313,6 @@ return {
 
       -- Reset it to the default unprefixed K (note the special table wrapped syntax)
       vim.g["conjure#mapping#doc_word"] = { "K" }
-    end
+    end,
   },
 }

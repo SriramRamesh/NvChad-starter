@@ -75,11 +75,11 @@ local fzf_key_map = {
 
 local function on_attach(client, bufnr)
   -- on_attach_nvchad(client, bufnr)
-  for mode, maps in pairs(fzf_key_map) do
-    for key, val in pairs(maps) do
-      map(mode, key, val[1], { buffer = bufnr, desc = val[2] })
-    end
-  end
+  -- for mode, maps in pairs(fzf_key_map) do
+  --   for key, val in pairs(maps) do
+  --     map(mode, key, val[1], { buffer = bufnr, desc = val[2] })
+  --   end
+  -- end
   navbuddy.attach(client, bufnr)
   require("navigator.lspclient.mapping").setup({ client = client, bufnr = bufnr }) -- setup navigator keymaps here,
   require("navigator.dochighlight").documentHighlight(bufnr)

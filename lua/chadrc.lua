@@ -5,7 +5,7 @@
 local M = {}
 
 M.ui = {
-  theme = "ayu_dark",
+  theme = "yoru",
 
   hl_override = {
     -- this will use the black color from nvchad theme & lighten it by 2x
