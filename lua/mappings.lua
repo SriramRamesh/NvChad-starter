@@ -64,25 +64,6 @@ M.general = {
   }
 }
 
-
--- M.nvterm = {
---   n = {
---     ["<leader>th"] = {
---       function()
---         require("nvterm.terminal").new "horizontal"
---       end,
---       "New horizontal term",
---     },
---
---     ["<leader>tv"] = {
---       function()
---         require("nvterm.terminal").new "vertical"
---       end,
---       "New vertical term",
---     }
---   }
--- }
-
 M.FzfLua = {
   n = {
     -- find
