@@ -65,23 +65,23 @@ M.general = {
 }
 
 
-M.nvterm = {
-  n = {
-    ["<leader>th"] = {
-      function()
-        require("nvterm.terminal").new "horizontal"
-      end,
-      "New horizontal term",
-    },
-
-    ["<leader>tv"] = {
-      function()
-        require("nvterm.terminal").new "vertical"
-      end,
-      "New vertical term",
-    }
-  }
-}
+-- M.nvterm = {
+--   n = {
+--     ["<leader>th"] = {
+--       function()
+--         require("nvterm.terminal").new "horizontal"
+--       end,
+--       "New horizontal term",
+--     },
+--
+--     ["<leader>tv"] = {
+--       function()
+--         require("nvterm.terminal").new "vertical"
+--       end,
+--       "New vertical term",
+--     }
+--   }
+-- }
 
 M.FzfLua = {
   n = {
@@ -107,7 +107,10 @@ M.FzfLua = {
     ["<leader>ts"] = { "<cmd> FzfLua terms <CR>", "Pick hidden term" },
 
     -- theme switcher
-    ["<leader>st"] = { "<cmd> FzfLua themes <CR>", "Nvchad themes" },
+    ["<leader>st"] = {
+      function()
+        require("nvchad.themes").open()
+      end, "Nvchad themes" },
 
     ["<leader>sm"] = { "<cmd> FzfLua marks <CR>", "telescope bookmarks" },
 
