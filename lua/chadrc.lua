@@ -4,15 +4,27 @@
 ---@type ChadrcConfig
 local M = {}
 
-M.ui = {
-  theme = "yoru",
-
+M.base46 = {
+  -- theme = "ayu-dark",
+	theme = "dark_horizon",
+  hl_add = {
+    CurSearch = {
+      bg = "orange",
+      fg = "one_bg"
+    },
+  },
   hl_override = {
     -- this will use the black color from nvchad theme & lighten it by 2x
     -- use a negative number to darken it
     Visual = {
       bg = { "one_bg3", 2 }
     },
+    -- IncSearch = {
+    --   bg = { "orange", 0}
+    -- },
+    -- -- CurV
+    -- guibg=#ffb86c
+-- highlight CurSearch guibg=orange
     -- Normal = {
     --   bg = { "one_bg3", 1 }
     -- },

@@ -78,7 +78,7 @@ navigator.setup({
     -- any LSP server for you, use `disable_lsp = "all"`.
     -- you may need to add this to your own on_attach hook:
     -- require('navigator.lspclient.mapping').setup({bufnr=bufnr, client=client})
-    -- for e.g. denols and tsserver you may want to enable one lsp server at a time.
+    -- for e.g. denols and ts_ls you may want to enable one lsp server at a time.
     -- default value: {}
     diagnostic = {
       underline = true,
@@ -119,7 +119,7 @@ navigator.setup({
     diagnostic_update_in_insert = false, -- update diagnostic message in insert mode
     display_diagnostic_qf = true, -- always show quickfix if there are diagnostic errors, set to false if you want to ignore it
     -- set to 'trouble' to show diagnostcs in Trouble
-    tsserver = {
+    ts_ls = {
       filetypes = { 'typescript' } -- disable javascript etc,
       -- set to {} to disable the lspclient for all filetypes
     },

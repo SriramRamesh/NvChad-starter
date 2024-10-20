@@ -281,6 +281,20 @@ return {
       require "configs.navigator"
     end,
   },
+  -- UI
+  -- {
+  --   "ray-x/guihua.lua",
+  --   build = "cd lua/fzy && make",
+  --   lazy = true,
+  --   init = function()
+  --     -- vim.cmd([[hi default GuihuaTextViewDark guifg=#e0d8f4 guibg=#332e55]])
+  --     -- vim.cmd([[hi default GuihuaListDark guifg=#e0d8f4 guibg=#103234]])
+  --     -- vim.cmd([[hi default GuihuaListHl guifg=#e0d8f4 guibg=#404254]])
+  --     vim.cmd([[hi default GuihuaTextViewDark ctermfg=white ctermbg=236 cterm=NONE]])
+  --     vim.cmd([[hi default GuihuaListDark ctermfg=white ctermbg=236 cterm=NONE]])
+  --     vim.cmd([[hi default GuihuaListHl ctermfg=white ctermbg=cyan]])
+  --   end
+  -- },
   {
     "benlubas/molten-nvim",
     version = "^1.0.0", -- use version <2.0.0 to avoid breaking changes
@@ -315,4 +329,23 @@ return {
       vim.g["conjure#mapping#doc_word"] = { "K" }
     end,
   },
+  {
+    'nvim-orgmode/orgmode',
+    event = 'VeryLazy',
+    ft = { 'org' },
+    config = function()
+      -- Setup orgmode
+      require('orgmode').setup({
+        org_agenda_files = '~/org/**/*',
+        org_default_notes_file = '~/org/refile.org',
+      })
+
+      -- NOTE: If you are using nvim-treesitter with ~ensure_installed = "all"~ option
+      -- add ~org~ to ignore_install
+      -- require('nvim-treesitter.configs').setup({
+      --   ensure_installed = 'all',
+      --   ignore_install = { 'org' },
+      -- })
+    end,
+  }
 }
