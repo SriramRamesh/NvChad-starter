@@ -68,8 +68,8 @@ M.FzfLua = {
   n = {
     -- find
     ["<leader><leader>"] = { "<cmd>FzfLua files<CR>", "Find files" },
-    ["<leader>sp"] = { "<cmd> FzfLua live_grep_glob <CR>", "Live grep glob" },
-    ["<leader>sn"] = { "<cmd> FzfLua live_grep_native <CR>", "Live grep glob" },
+    ["<leader>sp"] = { "<cmd> FzfLua live_grep_glob git_icons=false <CR>", "Live grep glob" },
+    ["<leader>sn"] = { "<cmd> FzfLua live_grep_native git_icons=false <CR>", "Live grep glob" },
     ["<leader>sw"] = { "<cmd> FzfLua grep_cword <CR>", "grep current word" },
     ["<leader>sW"] = { "<cmd> FzfLua grep_cWORD <CR>", "grep curent WORD" },
     ["<leader><"] = { "<cmd> FzfLua buffers <CR>", "Find buffers" },

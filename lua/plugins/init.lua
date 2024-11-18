@@ -103,6 +103,14 @@ return {
     },
   },
   {
+    "nvim-treesitter/nvim-treesitter-context",
+    -- opts = { max_lines = 1 },
+    event = "BufReadPost",
+    config = function ()
+      require("configs.nvim-treesitter-context")
+    end
+  },
+  {
     "goolord/alpha-nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     lazy = false,
@@ -267,20 +275,31 @@ return {
   },
   {
     "SmiteshP/nvim-navbuddy",
+    cmd = "Navbuddy",
     config = function()
       require "configs.navbuddy"
     end,
-  },
-  {
-    "ray-x/navigator.lua",
-    dependencies = {
-      { "ray-x/guihua.lua",     build = "cd lua/fzy && make" },
-      { "neovim/nvim-lspconfig" },
+    keys = {
+      {
+        "gs",
+        function()
+          require("nvim-navbuddy").open()
+        end,
+        desc = "open navbuddy",
+      },
     },
-    config = function()
-      require "configs.navigator"
-    end,
+
   },
+  -- {
+  --   "ray-x/navigator.lua",
+  --   dependencies = {
+  --     { "ray-x/guihua.lua",     build = "cd lua/fzy && make" },
+  --     { "neovim/nvim-lspconfig" },
+  --   },
+  --   config = function()
+  --     require "configs.navigator"
+  --   end,
+  -- },
   -- UI
   -- {
   --   "ray-x/guihua.lua",

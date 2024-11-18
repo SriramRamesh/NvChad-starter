@@ -29,7 +29,7 @@ dashboard.section.buttons.val = {
   dashboard.button("SPC SPC", "  Find file"),
   dashboard.button("SPC f r", "  Recently opened files"),
   dashboard.button("SPC f j", "  Frecency/MRU"),
-  dashboard.button("SPC s p", "  Find word",  "<cmd>Telescope live_grep<cr>"),
+  dashboard.button("SPC s p", "  Find word"),
   -- dashboard.button("SPC f b", "  Jump to Bookmarks"),
   dashboard.button("SPC f m", "  Jump to Marks"),
 }
