@@ -15,9 +15,9 @@
 --   }
 -- }
 
-local config = require("fzf-lua.config")
-local trouble_actions = require("trouble.sources.fzf").actions
-config.defaults.actions.files["ctrl-q"] = trouble_actions.open
+-- local config = require("fzf-lua.config")
+-- local trouble_actions = require("trouble.sources.fzf").actions
+-- config.defaults.actions.files["ctrl-q"] = trouble_actions.open
 
 local actions = require "fzf-lua.actions"
 require 'fzf-lua'.setup {
@@ -128,6 +128,7 @@ require 'fzf-lua'.setup {
       ["f4"]         = "toggle-preview",
       ["shift-down"] = "preview-page-down",
       ["shift-up"]   = "preview-page-up",
+      ["ctrl-q"]     = "select-all+accept",
     },
   },
   actions       = {

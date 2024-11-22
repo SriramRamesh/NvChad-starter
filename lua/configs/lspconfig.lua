@@ -90,6 +90,7 @@ local trouble_keymap = {
       "Lsp implementations" },
     ["gT"] = { "<cmd>Trouble symbols toggle focus=true win.position=bottom<cr>", "Lsp symbols" },
     ["gt"] = { "<cmd>Trouble symbols toggle focus=true win.position=right<cr>", "Lsp symbols" },
+    ["gR"] = { vim.lsp.buf.rename, "Lsp Rename" },
   },
 }
 
@@ -137,6 +138,7 @@ local function on_attach(client, bufnr)
   -- require("navigator.lspclient.mapping").setup({ client = client, bufnr = bufnr }) -- setup navigator keymaps here,
   -- require("navigator.dochighlight").documentHighlight(bufnr)
   -- require("navigator.codeAction").code_action_prompt(bufnr)
+  -- map("n")
 end
 
 
