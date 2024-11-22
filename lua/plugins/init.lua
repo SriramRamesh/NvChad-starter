@@ -382,9 +382,20 @@ return {
     init = function()
       -- Your DBUI configuration
       vim.g.db_ui_use_nerd_fonts = 1
-		  vim.g.db_ui_env_variable_url = "https://www.googleapis.com/bigquery/v2:443?format=sparse&use_legacy_sql=false"
-		  vim.g.db_ui_auto_execute_table_helpers = 1
-		  -- vim.g.db_ui_execute_on_save = 0
+      vim.g.db_ui_env_variable_url = "https://www.googleapis.com/bigquery/v2:443?format=sparse&use_legacy_sql=false"
+      vim.g.db_ui_auto_execute_table_helpers = 1
+      -- vim.g.db_ui_execute_on_save = 0
+    end,
+  },
+  {
+    "nvim-tree/nvim-tree.lua",
+    version = "*",
+    lazy = false,
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+    },
+    config = function()
+      require "configs.nvim-tree"
     end,
   }
 }

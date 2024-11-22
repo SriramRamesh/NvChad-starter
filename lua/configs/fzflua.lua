@@ -297,7 +297,7 @@ require 'fzf-lua'.setup {
     prompt                 = 'Files❯ ',
     multiprocess           = true, -- run command in a separate process
     git_icons              = false, -- show git icons?
-    file_icons             = "mini", -- show file icons (true|"devicons"|"mini")?
+    file_icons             = "devicons", -- show file icons (true|"devicons"|"mini")?
     color_icons            = false, -- colorize file|git icons
     -- path_shorten   = 1,              -- 'true' or number, shorten path?
     -- Uncomment for custom vscode-like formatter where the filename is first:
