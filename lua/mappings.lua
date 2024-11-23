@@ -107,6 +107,15 @@ M.Gitlinker = {
       "Open git link for the line",
       opts = { silent = true },
     },
+    ["<leader>gy"] = {
+      function()
+        require("gitlinker").get_buf_range_url()
+        -- require("gitlinker").get_buf_range_url("n", { action_callback = require("gitlinker.actions").open_in_browser })
+      end,
+      "Copy git link for the line",
+      opts = { silent = true },
+    },
+
   },
 }
 

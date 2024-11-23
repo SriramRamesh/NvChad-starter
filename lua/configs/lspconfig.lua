@@ -73,28 +73,6 @@ local servers = {
   },
 }
 
-
-local trouble_keymap = {
-  n = {
-    ["gD"] = {
-      "<cmd>Trouble lsp_declarations toggle focus=true win.position=bottom <cr>",
-      "Lsp declaration" },
-    ["gd"] = {
-      "<cmd>Trouble lsp_definitions toggle focus=true win.position=bottom <cr>",
-      "Lsp definitions" },
-    ["gr"] = {
-      "<cmd>Trouble lsp_references toggle focus=true win.position=bottom <cr>",
-      "Lsp references" },
-    ["gI"] = {
-      "<cmd>Trouble lsp_implementations toggle focus=true win.position=bottom <cr>",
-      "Lsp implementations" },
-    ["gT"] = { "<cmd>Trouble symbols toggle focus=true win.position=bottom<cr>", "Lsp symbols" },
-    ["gt"] = { "<cmd>Trouble symbols toggle focus=true win.position=right<cr>", "Lsp symbols" },
-    ["gR"] = { vim.lsp.buf.rename, "Lsp Rename" },
-  },
-}
-
-
 local fzf_key_map = {
   n = {
     ["gD"] = {
@@ -117,12 +95,9 @@ local fzf_key_map = {
         require("fzf-lua").lsp_implementations { jump_to_single_result = true, silent = true }
       end,
       "Lsp implementations" },
-    ["gT"] = { "<cmd>Trouble symbols toggle focus=true win.position=bottom<cr>", "Lsp symbols" },
-    ["gt"] = { "<cmd>Trouble symbols toggle focus=true win.position=right<cr>", "Lsp symbols" },
-    -- ["gs"] = {
-    --   function()
-    --     navbuddy.open()
-    --   end, "Lsp symbols" },
+    ["gR"] = { vim.lsp.buf.rename, "Lsp Rename" },
+    -- ["gT"] = { "<cmd>Trouble symbols toggle focus=true win.position=right<cr>", "Lsp symbols" },
+    ["gS"] = { "<cmd>Trouble symbols toggle focus=true win.position=bottom<cr>", "Lsp symbols" },
   },
 }
 
@@ -130,7 +105,7 @@ local fzf_key_map = {
 local function on_attach(client, bufnr)
   -- on_attach_nvchad(client, bufnr)
   navbuddy.attach(client, bufnr)
-  for mode, maps in pairs(trouble_keymap) do
+  for mode, maps in pairs(fzf_key_map) do
     for key, val in pairs(maps) do
       map(mode, key, val[1], { buffer = bufnr, desc = val[2] })
     end

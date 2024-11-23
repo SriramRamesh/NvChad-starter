@@ -1,24 +1,4 @@
--- _G.my_action = function(selected, opts)
---   if #selected>1 then
---     -- build the quickfix list from the selected items
---    require'fzf-lua'.actions.file_sel_to_qf(selected, opts)
---     -- call the command to open the 'trouble.nvim' interface
---     vim.cmd("<trouble nvim command>")
---   else
---     require'fzf-lua'.actions.file_edit(selected, opts)
---   end
--- end
---
--- require'fzf-lua'.setup {
---   files = {
---     actions = { ['ctrl-t'] = { fn = _G.my_action, prefix = 'select-all+' } },
---   }
--- }
-
--- local config = require("fzf-lua.config")
--- local trouble_actions = require("trouble.sources.fzf").actions
--- config.defaults.actions.files["ctrl-q"] = trouble_actions.open
-
+local trouble_actions = require("trouble.sources.fzf").actions
 local actions = require "fzf-lua.actions"
 require 'fzf-lua'.setup {
   -- fzf_bin         = 'sk',            -- use skim instead of fzf?
@@ -128,7 +108,7 @@ require 'fzf-lua'.setup {
       ["f4"]         = "toggle-preview",
       ["shift-down"] = "preview-page-down",
       ["shift-up"]   = "preview-page-up",
-      ["ctrl-q"]     = "select-all+accept",
+      ["ctrl-Q"]     = "select-all+accept",
     },
   },
   actions       = {
@@ -286,6 +266,9 @@ require 'fzf-lua'.setup {
   -- PROVIDERS SETUP
   -- use `defaults` (table or function) if you wish to set "global-provider" defaults
   -- for example, using "mini.icons" globally and open the quickfix list at the top
+  defaults = {
+    formatter      = "path.filename_first",
+  },
   --   defaults = {
   --     file_icons   = "mini",
   --     copen        = "topleft copen",
@@ -326,6 +309,7 @@ require 'fzf-lua'.setup {
       -- or set bind to 'false' to disable a default action
       -- action to toggle `--no-ignore`, requires fd or rg installed
       ["ctrl-g"] = { actions.toggle_ignore },
+      ["ctrl-q"] = trouble_actions.open,
       -- uncomment to override `actions.file_edit_or_qf`
       --   ["enter"]     = actions.file_edit,
       -- custom actions are available too
@@ -504,9 +488,10 @@ require 'fzf-lua'.setup {
     actions        = {
       -- actions inherit from 'actions.files' and merge
       -- this action toggles between 'grep' and 'live_grep'
-      ["ctrl-g"] = { actions.grep_lgrep }
+      ["ctrl-g"] = { actions.grep_lgrep },
       -- uncomment to enable '.gitignore' toggle for grep
       -- ["ctrl-r"]   = { actions.toggle_ignore }
+      -- ["ctrl-q"] = { trouble_actions.open }
     },
     no_header      = false, -- hide grep|cwd header?
     no_header_i    = false, -- hide interactive header?
@@ -693,6 +678,7 @@ require 'fzf-lua'.setup {
   },
   lsp = {
     prompt_postfix     = '❯ ', -- will be appended to the LSP label
+    -- path_shorten   = true,              -- 'true' or number, shorten path?
     -- to override use 'prompt' instead
     cwd_only           = false, -- LSP/diagnostics for cwd only?
     async_or_timeout   = 5000, -- timeout(ms) or 'true' for async calls

@@ -181,6 +181,7 @@ return {
   },
   {
     "NeogitOrg/neogit",
+    cmd = "Neogit",
     dependencies = {
       "nvim-lua/plenary.nvim",  -- required
       "sindrets/diffview.nvim", -- optional - Diff integration
@@ -188,9 +189,10 @@ return {
       -- Only one of these is needed, not both.
       "ibhagwan/fzf-lua", -- optional
     },
-    cmd = "Neogit",
     config = function()
       require "configs.neogit"
+      dofile(vim.g.base46_cache .. "git")
+      dofile(vim.g.base46_cache .. "neogit")
     end,
     keys = {
       { "<leader>gg", "<cmd>Neogit<cr>", desc = "LazyGit" },
@@ -223,11 +225,11 @@ return {
         "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
         desc = "Buffer Diagnostics (Trouble)",
       },
-      -- {
-      --   "<leader>cs",
-      --   "<cmd>Trouble symbols toggle focus=false<cr>",
-      --   desc = "Symbols (Trouble)",
-      -- },
+      {
+        "<leader>cs",
+        "<cmd>Trouble symbols toggle focus=false win.position=bottom",
+        desc = "Symbols (Trouble)",
+      },
       {
         "<leader>cl",
         "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
