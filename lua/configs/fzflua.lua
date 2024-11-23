@@ -128,6 +128,7 @@ require 'fzf-lua'.setup {
       ["ctrl-t"] = actions.file_tabedit,
       ["alt-q"]  = actions.file_sel_to_qf,
       ["alt-Q"]  = actions.file_sel_to_ll,
+      ["ctrl-q"] = trouble_actions.open,
     },
   },
   fzf_opts      = {
@@ -491,7 +492,6 @@ require 'fzf-lua'.setup {
       ["ctrl-g"] = { actions.grep_lgrep },
       -- uncomment to enable '.gitignore' toggle for grep
       -- ["ctrl-r"]   = { actions.toggle_ignore }
-      -- ["ctrl-q"] = { trouble_actions.open }
     },
     no_header      = false, -- hide grep|cwd header?
     no_header_i    = false, -- hide interactive header?
