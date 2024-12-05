@@ -8,6 +8,7 @@ require('nvim-tree').setup({
   },
   filters = { dotfiles = false },
   disable_netrw = true,
+  update_cwd = true,
   hijack_cursor = true,
   sync_root_with_cwd = true,
   update_focused_file = {

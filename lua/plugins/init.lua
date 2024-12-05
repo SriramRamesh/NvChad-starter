@@ -106,7 +106,7 @@ return {
     "nvim-treesitter/nvim-treesitter-context",
     -- opts = { max_lines = 1 },
     event = "BufReadPost",
-    config = function ()
+    config = function()
       require("configs.nvim-treesitter-context")
     end
   },
@@ -372,7 +372,7 @@ return {
   {
     'kristijanhusak/vim-dadbod-ui',
     dependencies = {
-      { 'tpope/vim-dadbod', lazy = true },
+      { 'tpope/vim-dadbod',                     lazy = true },
       { 'kristijanhusak/vim-dadbod-completion', ft = { 'sql', 'mysql', 'plsql' }, lazy = true }, -- Optional
     },
     cmd = {
@@ -399,5 +399,30 @@ return {
     config = function()
       require "configs.nvim-tree"
     end,
+  },
+  {
+    "olimorris/codecompanion.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      -- The following are optional:
+      { "MeanderingProgrammer/render-markdown.nvim", ft = { "markdown", "codecompanion" } },
+    },
+    config = function()
+      require "configs.codecompanion"
+    end
+  },
+  {
+    'pwntester/octo.nvim',
+    cmd = "Octo",
+    requires = {
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope.nvim',
+      -- OR 'ibhagwan/fzf-lua',
+      'nvim-tree/nvim-web-devicons',
+    },
+    config = function()
+      require "configs.octo"
+    end
   }
 }

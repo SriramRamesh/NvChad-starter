@@ -47,6 +47,10 @@ map("i", "<C-S-tab>", function()
   require("nvchad.tabufline").prev()
 end, { desc = "buffer goto prev" })
 
+map("n", "[c", function()
+  require("treesitter-context").go_to_context(vim.v.count1)
+end, { silent = true })
+
 
 local M = {}
 
@@ -92,6 +96,11 @@ M.FzfLua = {
       function()
         require("nvchad.themes").open()
       end, "Nvchad themes" },
+    ["<leader>sd"] = {
+      function()
+        local cwd_path = vim.print(vim.fn.expand('%:h'))
+        require("fzf-lua").live_grep_glob({git_icons=false, cwd=cwd_path})
+      end, "CWD search" },
 
     ["<leader>sm"] = { "<cmd> FzfLua marks <CR>", "telescope bookmarks" },
 
