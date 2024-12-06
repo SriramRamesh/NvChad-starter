@@ -1,5 +1,3 @@
--- load defaults i.e lua_lsp
-require("nvchad.configs.lspconfig").defaults()
 local configs = require "nvchad.configs.lspconfig"
 local map = vim.keymap.set
 local lspconfig = require "lspconfig"
