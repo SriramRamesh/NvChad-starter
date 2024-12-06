@@ -3,10 +3,53 @@ local map = vim.keymap.set
 local lspconfig = require "lspconfig"
 local util = require "lspconfig/util"
 local navbuddy = require "nvim-navbuddy"
+
+local lsp_configs = require('lspconfig.configs')
+lsp_configs.pbls = {
+  default_config = {
+    cmd = { "pbls"},
+    filetypes = { "proto" },
+    -- single_file_support = true,
+    -- root_dir = function() end,
+    root_dir = function(fname)
+      return util.root_pattern( '.git')(fname)
+    end,
+  },
+}
+-- lsp_configs.buf = {
+--   default_config = {
+--     cmd = { 'buf', 'beta', 'lsp' },
+--     filetypes = { 'proto' },
+--     root_dir = function(fname)
+--       return util.root_pattern( '.git')(fname)
+--     end,
+--   },
+-- }
+-- lsp_configs.protobuf_language_server = {
+--     default_config = {
+--         cmd = { '/Users/sriram/go/bin/protobuf-language-server' },
+--         filetypes = { 'proto', 'cpp' },
+--         root_dir = util.root_pattern('.git'),
+--         single_file_support = false,
+--         settings = {
+--             -- ["additional-proto-dirs"] = [
+--             --     -- path to additional protobuf directories
+--             --     -- "vendor",
+--             --     -- "third_party",
+--             -- ]
+--         },
+--     }
+-- }
+
 local servers = {
   html = {},
   awk_ls = {},
   bashls = {},
+  -- protols = {},
+  -- pb = {},
+  -- protobuf_language_server ={},
+  -- buf = {},
+  pbls = {},
   ts_ls = {},
   lua_ls = {
     settings = {

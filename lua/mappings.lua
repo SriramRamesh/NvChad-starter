@@ -64,7 +64,10 @@ M.general = {
     ["<leader>wv"] = { "<cmd> vsplit<CR>", "Window split vertical" },
     ["<leader>ws"] = { "<cmd> split <CR>", "Window split horizontal" },
     ["<leader>bN"] = { "<cmd> enew <CR>", "New buffer" },
-    ["<leader>bs"] = { "<cmd> w <CR>", "New buffer" }
+    ["<leader>bs"] = { "<cmd> w <CR>", "New buffer" },
+    ['<leader>yp'] = { function() vim.fn.setreg('+', vim.fn.expand('%:p:.')) end, desc = 'Yank file path' },
+    ['<leader>yd'] = { function() vim.fn.setreg('+', vim.fn.expand('%:h')) end, desc = 'Yank directory path' },
+    ['<leader>yf'] = { function() vim.fn.setreg('+', vim.fn.expand('%:t')) end, desc = 'Yank file name' }
   }
 }
 
@@ -99,7 +102,7 @@ M.FzfLua = {
     ["<leader>sd"] = {
       function()
         local cwd_path = vim.print(vim.fn.expand('%:h'))
-        require("fzf-lua").live_grep_glob({git_icons=false, cwd=cwd_path})
+        require("fzf-lua").live_grep_glob({ git_icons = false, cwd = cwd_path })
       end, "CWD search" },
 
     ["<leader>sm"] = { "<cmd> FzfLua marks <CR>", "telescope bookmarks" },

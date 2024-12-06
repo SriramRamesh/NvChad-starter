@@ -79,6 +79,7 @@ return {
         "markdown_inline",
         "printf",
         "python",
+        "proto",
         "sql",
         "query",
         "regex",
