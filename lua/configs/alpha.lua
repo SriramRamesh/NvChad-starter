@@ -26,12 +26,15 @@ dashboard.config.layout[1].val = vim.fn.max { 2, vim.fn.floor(vim.fn.winheight(0
 dashboard.config.layout[3].val = 3
 dashboard.config.opts.noautocmd = true
 dashboard.section.buttons.val = {
-  dashboard.button("SPC SPC", "  Find file"),
-  dashboard.button("SPC f r", "  Recently opened files"),
-  dashboard.button("SPC f j", "  Frecency/MRU"),
-  dashboard.button("SPC s p", "  Find word"),
-  -- dashboard.button("SPC f b", "  Jump to Bookmarks"),
-  dashboard.button("SPC f m", "  Jump to Marks"),
+  dashboard.button("SPC p p", "󰝰  Open Project"),
+  -- dashboard.button("SPC p a", "  Recent Project"),
+  dashboard.button("SPC p r", "󰈸  Recent Project"),
+  dashboard.button("SPC SPC", "󰈞  Find file"),
+  dashboard.button("SPC f r", "  Recently opened files"),
+  dashboard.button("SPC f j", "  Goto Jumps"),
+  dashboard.button("SPC s p", "󰍉  Search in Project"),
+  dashboard.button("SPC s s", "  Run Swiper"),
+  -- dashboard.button("SPC f m", "  Jump to Marks"),
 }
 
 require("alpha").setup(dashboard.config)

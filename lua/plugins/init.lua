@@ -157,7 +157,7 @@ return {
   {
     "nvim-telescope/telescope.nvim",
     -- enabled = false,
-    pts = { extensions_list = { "fzf" } },
+    pts = { extensions_list = { "fzf", "projects" } },
     dependencies = {
       { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
     },
@@ -425,5 +425,35 @@ return {
     config = function()
       require "configs.octo"
     end
+  },
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
+    ---@module "ibl"
+    ---@type ibl.config
+    opts = {},
+    config = function()
+      require("configs.indent-blankline")
+    end
+  },
+  {
+    "coffebar/neovim-project",
+    init = function()
+      -- enable saving the state of plugins in the session
+      vim.opt.sessionoptions:append("globals") -- save global variables that start with an uppercase letter and contain at least one lowercase letter.
+    end,
+    config = function()
+      require("configs.neovim-project")
+    end,
+    dependencies = {
+      { "nvim-lua/plenary.nvim" },
+      -- optional picker
+      { "nvim-telescope/telescope.nvim", tag = "0.1.4" },
+      -- optional picker
+      { "ibhagwan/fzf-lua" },
+      { "Shatur/neovim-session-manager" },
+    },
+    lazy = false,
+    priority = 100,
   }
 }

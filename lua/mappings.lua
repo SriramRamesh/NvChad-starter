@@ -131,6 +131,17 @@ M.Gitlinker = {
   },
 }
 
+M.NeovimProject = {
+  n = {
+    ["<leader>pp"] = { "<cmd> NeovimProjectDiscover <CR>","Discover Projects" },
+    ["<leader>pr"] = { "<cmd> NeovimProjectLoadRecent <CR>","Load Recent Projects" },
+    -- ["<leader>pa"] = { function ()
+    --   local cwd = vim.fn.getcwd()
+    --   vim.opts.
+    -- end,"Load Recent Projects" },
+  }
+}
+
 
 
 for _, mappings in pairs(M) do
