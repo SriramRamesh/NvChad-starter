@@ -5,7 +5,6 @@ require("neovim-project").setup({
     "~/airflow",
     "~/terraform-bigquery",
     "~/explab-conf/",
-    "~/rmp-infra",
     "~/looker-avod",
     "~/.config/nvim",
   },

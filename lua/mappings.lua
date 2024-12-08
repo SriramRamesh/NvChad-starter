@@ -137,6 +137,7 @@ M.NeovimProject = {
     ["<leader>pr"] = { "<cmd> NeovimProjectLoadRecent <CR>","Load Recent Projects" },
     ["<leader>px"] = { function () require("nvchad.tabufline").closeAllBufs(true) end, "Close all buffers"},
     ["<leader>po"] = { function () require("nvchad.tabufline").closeAllBufs(false) end, "Close other buffers"},
+    -- ["<leader>p1"] = { function () require("nvchad.tabufline").closeAllBufs(false) end, "Close other buffers"},
     --   local cwd = vim.fn.getcwd()
     --   vim.opts.
     -- end,"Load Recent Projects" },

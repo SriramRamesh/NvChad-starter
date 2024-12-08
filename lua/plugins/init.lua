@@ -173,7 +173,7 @@ return {
   {
     "ruifm/gitlinker.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
-    cmd = "Gitlinker",
+    -- cmd = "Gitlinker",
     config = function()
       require("gitlinker").setup {}
     end,
@@ -413,5 +413,19 @@ return {
     },
     lazy = false,
     priority = 100,
-  }
+  },
+  {
+    'pwntester/octo.nvim',
+    cmd = "Octo",
+    requires = {
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope.nvim',
+      -- OR 'ibhagwan/fzf-lua',
+      'nvim-tree/nvim-web-devicons',
+    },
+    config = function()
+      require "configs.octo"
+    end
+  },
+
 }
