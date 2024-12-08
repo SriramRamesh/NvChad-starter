@@ -11,26 +11,6 @@ return {
       require "configs.conform"
     end,
   },
-  -- {
-  --     "williamboman/mason-lspconfig.nvim",
-  --     dependencies = {
-  --     "williamboman/mason.nvim",
-  --     "neovim/nvim-lspconfig",
-  --       {
-  --         "SmiteshP/nvim-navbuddy",
-  --         dependencies = {
-  --           "SmiteshP/nvim-navic",
-  --           "MunifTanjim/nui.nvim"
-  --         },
-  --         opts = { lsp = { auto_attach = true } }
-  --       }
-  --     },
-  --     config = function()
-  --       require "configs.mazonlsp.lua"
-  --       -- require("nvchad.configs.lspconfig").defaults()
-  --       -- require "configs.lspconfig"
-  --     end,
-  -- },
   {
     "neovim/nvim-lspconfig",
     dependencies = {
@@ -48,15 +28,6 @@ return {
       require "configs.lspconfig"
     end,
   },
-  -- {
-  --   "williamboman/mason.nvim",
-  --   opts = {
-  --     ensure_installed = {
-  --       "lua-language-server", "stylua",
-  --       "html-lsp", "css-lsp", "prettier"
-  --     },
-  --   },
-  -- },
   {
     "nvim-treesitter/nvim-treesitter",
     opts = {
@@ -411,19 +382,6 @@ return {
     },
     config = function()
       require "configs.codecompanion"
-    end
-  },
-  {
-    'pwntester/octo.nvim',
-    cmd = "Octo",
-    requires = {
-      'nvim-lua/plenary.nvim',
-      'nvim-telescope/telescope.nvim',
-      -- OR 'ibhagwan/fzf-lua',
-      'nvim-tree/nvim-web-devicons',
-    },
-    config = function()
-      require "configs.octo"
     end
   },
   {

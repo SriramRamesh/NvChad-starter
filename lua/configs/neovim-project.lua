@@ -2,6 +2,11 @@ require("neovim-project").setup({
   -- Project directories
   projects = {
     "~/marvel2",
+    "~/airflow",
+    "~/terraform-bigquery",
+    "~/explab-conf/",
+    "~/rmp-infra",
+    "~/looker-avod",
     "~/.config/nvim",
   },
   -- Path to store history and sessions
