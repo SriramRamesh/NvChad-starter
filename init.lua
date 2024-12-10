@@ -2,7 +2,8 @@ vim.g.base46_cache = vim.fn.stdpath "data" .. "/nvchad/base46/"
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.opt.relativenumber = true
-vim.o.guifont = "JetBrainsMono Nerd Font:h20:#h-slight" -- Source Code Pro:h12:#h-slight
+vim.o.guifont = "JetBrainsMono Nerd Font:h16:#h-slight" -- Source Code Pro:h12:#h-slight
+vim.o.cmdheight=0
 -- vim.opt.inccommand = "split"
 -- bootstrap lazy and all plugins
 local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
