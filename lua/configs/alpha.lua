@@ -27,14 +27,13 @@ dashboard.config.layout[3].val = 3
 dashboard.config.opts.noautocmd = true
 dashboard.section.buttons.val = {
   dashboard.button("SPC p p", "󰝰  Open Project"),
-  -- dashboard.button("SPC p a", "  Recent Project"),
   dashboard.button("SPC p r", "󰈸  Recent Project"),
-  dashboard.button("SPC SPC", "󰈞  Find file"),
+  dashboard.button("SPC p a", "  Add Project"),
   dashboard.button("SPC f r", "  Recently opened files"),
-  dashboard.button("SPC f j", "  Goto Jumps"),
   dashboard.button("SPC s p", "󰍉  Search in Project"),
+  dashboard.button("SPC SPC", "󰈞  Find file"),
+  dashboard.button("SPC f j", "  Goto Jumps"),
   dashboard.button("SPC s s", "  Run Swiper"),
-  -- dashboard.button("SPC f m", "  Jump to Marks"),
 }
 
 require("alpha").setup(dashboard.config)

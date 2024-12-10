@@ -427,5 +427,9 @@ return {
       require "configs.octo"
     end
   },
-
+  {'rcarriga/nvim-notify',
+  config = function ()
+  require("notify").setup({})
+    
+  end}
 }
