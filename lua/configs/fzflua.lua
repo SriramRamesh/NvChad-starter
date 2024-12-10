@@ -13,7 +13,7 @@ local function browse_directory(current_dir, directory_fn)
   local display_dir = current_dir:gsub("^" .. vim.pesc(home_dir), "~")
 
   local find_command = string.format(
-    "echo '%s' && find '%s' -mindepth 1 -maxdepth 1 -type d ! -name '.*' -print | sed 's|^%s|~|' && echo ..",
+    "echo '%s' && find '%s' -mindepth 1 -maxdepth 2 -type d ! -name '.*' -print | sed 's|^%s|~|' && echo ..",
     current_dir:gsub("^" .. vim.pesc(home_dir), "~"),
     current_dir,
     vim.pesc(home_dir)
