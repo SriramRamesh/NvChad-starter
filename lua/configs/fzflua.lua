@@ -5,142 +5,129 @@ local utils = require("utils")
 local notify = require("notify")
 local target_filepath = vim.fn.stdpath("config") .. "/projects"
 
+
+local home_dir = vim.fn.expand("~")
+
+local function browse_directory(current_dir, directory_fn)
+  -- If the current directory is within the home directory, replace it with '~' for display
+  local display_dir = current_dir:gsub("^" .. vim.pesc(home_dir), "~")
+
+  local find_command = string.format(
+    "echo '%s' && find '%s' -mindepth 1 -maxdepth 1 -type d ! -name '.*' -print | sed 's|^%s|~|' && echo ..",
+    current_dir:gsub("^" .. vim.pesc(home_dir), "~"),
+    current_dir,
+    vim.pesc(home_dir)
+  )
+  fzf.fzf_exec(find_command, {
+    prompt = "Select a directory (" .. display_dir .. ") > ",
+    previewer = false, -- Hide the preview window
+    cwd = current_dir, -- Start fzf in the current directory
+    actions = {
+      ["default"] = function(selected)
+        -- Ensure selected is a table (list of selections)
+        if type(selected) == "string" then
+          selected = { selected }
+        end
+
+        -- Handle the selected directory
+        for _, path in ipairs(selected) do
+          if path == ".." then
+            -- Go up one level and re-run the browse function
+            local parent_dir = vim.fn.fnamemodify(current_dir, ":h")
+            browse_directory(parent_dir, directory_fn)
+            return
+          end
+          -- Ensure the path is absolute
+          local abs_path = vim.fn.fnamemodify(path, ":p")
+
+          -- Append the selected path to the file
+          directory_fn(abs_path)
+
+        end
+      end,
+    },
+  })
+end
+
+
 -- Function to browse directories and append the selected path to a file
 local function append_selected_directory_to_file()
-  -- Get the home directory path
-  local home_dir = vim.fn.expand("~")
-
-  local function browse_directory(current_dir)
-    -- If the current directory is within the home directory, replace it with '~' for display
-    local display_dir = current_dir:gsub("^" .. vim.pesc(home_dir), "~")
-
-    -- List immediate subdirectories and add '..' to go up one level
-    -- local find_command = string.format(
-    --   "find '%s' -mindepth 1 -maxdepth 1 -type d ! -name '.*' -print | sed 's|^%s|~|' && echo ..",
-    --   current_dir,
-    --   vim.pesc(home_dir)
-    -- )
-    -- List the current directory, immediate subdirectories, and '..' to go up one level
-    local find_command = string.format(
-      "echo '%s' && find '%s' -mindepth 1 -maxdepth 1 -type d ! -name '.*' -print | sed 's|^%s|~|' && echo ..",
-      current_dir:gsub("^" .. vim.pesc(home_dir), "~"),
-      current_dir,
-      vim.pesc(home_dir)
-    )
-    fzf.fzf_exec(find_command, {
-      prompt = "Select a directory (" .. display_dir .. ") > ",
-      previewer = false, -- Hide the preview window
-      cwd = current_dir, -- Start fzf in the current directory
-      actions = {
-        ["default"] = function(selected)
-          -- Ensure selected is a table (list of selections)
-          if type(selected) == "string" then
-            selected = { selected }
-          end
-
-          -- Handle the selected directory
-          for _, path in ipairs(selected) do
-            if path == ".." then
-              -- Go up one level and re-run the browse function
-              local parent_dir = vim.fn.fnamemodify(current_dir, ":h")
-              browse_directory(parent_dir)
-              return
-            end
-            -- Ensure the path is absolute
-            local abs_path = vim.fn.fnamemodify(path, ":p")
-
-            -- Append the selected path to the file
-            utils.append_path_to_file(abs_path, target_filepath)
-
-          end
-        end,
-      },
-    })
+  local function directory_fn(abs_path)
+    utils.append_path_to_file(abs_path, target_filepath)
   end
-
   -- Start browsing from the current working directory
-  local cwd = vim.fn.getcwd()
-  browse_directory(cwd)
+  -- Get the home directory path
+  local current_dir = vim.fn.getcwd()
+  browse_directory(current_dir, directory_fn)
 end
 
 vim.keymap.set("n", "<leader>pa", append_selected_directory_to_file, { desc = "Choose a directory with fzf-lua" })
 
-
 local function choose_directory()
-    fzf.files({
-        prompt = "Select a directory > ",
-        cmd = "find . -type d",
-        actions = {
-            ["default"] = function(selected)
-                -- Handle the selected directory
-                vim.notify("Selected directory: " .. selected, vim.log.levels.INFO)
-            end,
-        },
-    })
+  local function directory_fn(abs_path)
+    vim.cmd("cd " .. abs_path)
+    vim.print("change directory in vim " .. abs_path)
+    notify("Changed directory to: " .. tostring(abs_path), vim.log.levels.INFO)
+
+  end
+  -- Start browsing from the current working directory
+  local current_dir = vim.fn.getcwd()
+  browse_directory(current_dir, directory_fn)
 end
 
 -- Keybinding to trigger the function
 vim.keymap.set("n", "<leader>cd", choose_directory, { desc = "Choose a directory with fzf-lua" })
 
-
-
--- async.run(function()
---   notify("Let's wait for this to close").events.close()
---   notify("It closed!")
--- end)
--- Path to the file containing the items
-
-
 -- Function to select items from the file and delete the selected ones
 local function select_and_delete_items()
-    -- Read all lines from the target file
-    local lines = utils.read_lines_from_file(target_filepath)
-    if #lines == 0 then
-        vim.notify("No items found in the file.", vim.log.levels.WARN)
-        return
-    end
+  -- Read all lines from the target file
+  local lines = utils.read_lines_from_file(target_filepath)
+  if #lines == 0 then
+    vim.notify("No items found in the file.", vim.log.levels.WARN)
+    return
+  end
 
-    -- Use fzf-lua to let the user select multiple lines
-    fzf.fzf_exec(lines, {
-        prompt = "Select items to delete > ",
-        actions = {
-            ["default"] = function(selected_items)
-                -- Remove trailing commas from selected items
-                for i, item in ipairs(selected_items) do
-                    selected_items[i] = utils.remove_trailing_comma(item)
-                end
+  -- Use fzf-lua to let the user select multiple lines
+  fzf.fzf_exec(lines, {
+    prompt = "Select items to delete > ",
+    actions = {
+      ["default"] = function(selected_items)
+        -- Remove trailing commas from selected items
+        for i, item in ipairs(selected_items) do
+          selected_items[i] = utils.remove_trailing_comma(item)
+        end
 
-                -- Create a set of selected items for quick lookup
-                local selected_set = {}
-                for _, item in ipairs(selected_items) do
-                    selected_set[item] = true
-                end
+        -- Create a set of selected items for quick lookup
+        local selected_set = {}
+        for _, item in ipairs(selected_items) do
+          selected_set[item] = true
+        end
 
-                -- Filter out the selected items
-                local new_lines = {}
-                local deleted_items = {}
-                for _, line in ipairs(lines) do
-                    local cleaned_line = utils.remove_trailing_comma(line)
-                    if selected_set[cleaned_line] then
-                        table.insert(deleted_items, cleaned_line)
-                    else
-                        table.insert(new_lines, line)
-                    end
-                end
+        -- Filter out the selected items
+        local new_lines = {}
+        local deleted_items = {}
+        for _, line in ipairs(lines) do
+          local cleaned_line = utils.remove_trailing_comma(line)
+          if selected_set[cleaned_line] then
+            table.insert(deleted_items, cleaned_line)
+          else
+            table.insert(new_lines, line)
+          end
+        end
 
-                -- Write the updated lines back to the file
-                utils.write_lines_to_file(target_filepath, new_lines)
+        -- Write the updated lines back to the file
+        utils.write_lines_to_file(target_filepath, new_lines)
 
-                -- Show notification with the deleted directories
-                if #deleted_items == 1 then
-                    local message = "Deleted directories: " .. tostring(deleted_items[1])
-                    notify(message, vim.log.levels.INFO)
-                else
-                    vim.notify("No directories were deleted.", vim.log.levels.INFO)
-                end
-            end,
-        },
-    })
+        -- Show notification with the deleted directories
+        if #deleted_items == 1 then
+          local message = "Deleted directories: " .. tostring(deleted_items[1])
+          notify(message, vim.log.levels.INFO)
+        else
+          vim.notify("No directories were deleted.", vim.log.levels.INFO)
+        end
+      end,
+    },
+  })
 end
 
 -- E
@@ -506,7 +493,7 @@ fzf.setup {
     commits = {
       prompt  = 'Commits❯ ',
       cmd     = [[git log --color --pretty=format:"%C(yellow)%h%Creset ]]
-          .. [[%Cgreen(%><(12)%cr%><|(12))%Creset %s %C(blue)<%an>%Creset"]],
+        .. [[%Cgreen(%><(12)%cr%><|(12))%Creset %s %C(blue)<%an>%Creset"]],
       preview = "git show --color {1}",
       -- git-delta is automatically detected as pager, uncomment to disable
       -- preview_pager = false,
@@ -524,7 +511,7 @@ fzf.setup {
       --   {1}    : commit SHA (fzf field index expression)
       --   {file} : filepath placement within the commands
       cmd     = [[git log --color --pretty=format:"%C(yellow)%h%Creset ]]
-          .. [[%Cgreen(%><(12)%cr%><|(12))%Creset %s %C(blue)<%an>%Creset" {file}]],
+        .. [[%Cgreen(%><(12)%cr%><|(12))%Creset %s %C(blue)<%an>%Creset" {file}]],
       preview = "git show --color {1} -- {file}",
       -- git-delta is automatically detected as pager, uncomment to disable
       -- preview_pager = false,
@@ -569,11 +556,11 @@ fzf.setup {
     tags = {
       prompt  = "Tags> ",
       cmd     = [[git for-each-ref --color --sort="-taggerdate" --format ]]
-          .. [["%(color:yellow)%(refname:short)%(color:reset) ]]
-          .. [[%(color:green)(%(taggerdate:relative))%(color:reset)]]
-          .. [[ %(subject) %(color:blue)%(taggername)%(color:reset)" refs/tags]],
+        .. [["%(color:yellow)%(refname:short)%(color:reset) ]]
+        .. [[%(color:green)(%(taggerdate:relative))%(color:reset)]]
+        .. [[ %(subject) %(color:blue)%(taggername)%(color:reset)" refs/tags]],
       preview = [[git log --graph --color --pretty=format:"%C(yellow)%h%Creset ]]
-          .. [[%Cgreen(%><(12)%cr%><|(12))%Creset %s %C(blue)<%an>%Creset" {1}]],
+        .. [[%Cgreen(%><(12)%cr%><|(12))%Creset %s %C(blue)<%an>%Creset" {1}]],
       actions = { ["enter"] = actions.git_checkout },
     },
     stash = {
