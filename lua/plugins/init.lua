@@ -428,8 +428,13 @@ return {
     end
   },
   {'rcarriga/nvim-notify',
-  config = function ()
-  require("notify").setup({})
-    
-  end}
+    config = function ()
+      require("notify").setup({})
+    end},
+  {
+    "gbprod/substitute.nvim",
+    config = function ()
+      require "configs.substitute"
+    end,
+  }
 }

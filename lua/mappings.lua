@@ -160,8 +160,15 @@ for _, mappings in pairs(M) do
   end
 end
 
+-- Lua
+map("n", "s", require("substitute").operator, {desc = "substitute operator"})
+map("n", "ss", require("substitute").line, {desc = "substitute line"})
+map("n", "S", require("substitute").eol, {desc = "substitute eol"})
+map("x", "s", require("substitute").visual, {desc = "substitute visual"})
+map("n", "gx", require("substitute.exchange").operator, {desc = "substitute.exchange operator"})
+map("n", "gX", require("substitute.exchange").line, {desc = "substitute.exchange line"})
+map("x", "gx", require("substitute.exchange").visual, {desc = "substitute.exchange visual"})
 
--- map("n", ";", ":", { desc = "CMD enter command mode" })
 map("i", "jk", "<ESC>")
 
 -- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
