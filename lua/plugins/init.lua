@@ -5,30 +5,6 @@ package.path = package.path .. ";" .. vim.fn.expand "$HOME" .. "/.luarocks/share
 --
 return {
   {
-    "stevearc/conform.nvim",
-    event = "BufWritePre", -- uncomment for format on save
-    config = function()
-      require "configs.conform"
-    end,
-  },
-  {
-    "neovim/nvim-lspconfig",
-    dependencies = {
-      {
-        "SmiteshP/nvim-navbuddy",
-        dependencies = {
-          "SmiteshP/nvim-navic",
-          "MunifTanjim/nui.nvim",
-        },
-        opts = { lsp = { auto_attach = true } },
-      },
-    },
-    config = function()
-      require("nvchad.configs.lspconfig").defaults()
-      require "configs.lspconfig"
-    end,
-  },
-  {
     "nvim-treesitter/nvim-treesitter",
     opts = {
       highlight = { enable = true },
@@ -56,6 +32,7 @@ return {
         "regex",
         "toml",
         "tsx",
+        "kdl",
         "typescript",
         "vim",
         "java",
@@ -83,37 +60,66 @@ return {
     end
   },
   {
+    "stevearc/conform.nvim",
+    event = "BufWritePre", -- uncomment for format on save
+    config = function()
+      require "configs.conform"
+    end,
+  },
+  {
+    'MunifTanjim/nui.nvim',
+  },
+  {
+    'SmiteshP/nvim-navic',
+    config = function ()
+      require("nvim-navic").setup({})
+    end
+  },
+  {
+    "SmiteshP/nvim-navbuddy",
+    cmd = "Navbuddy",
+    dependencies = {
+      "SmiteshP/nvim-navic",
+      "MunifTanjim/nui.nvim",
+    },
+    config = function()
+      require "configs.navbuddy"
+    end,
+    keys = {
+      {
+        "gs",
+        function()
+          require("nvim-navbuddy").open()
+        end,
+        desc = "open navbuddy",
+      },
+    },
+  },
+  {
+    "neovim/nvim-lspconfig",
+    dependencies = {
+      {
+        "SmiteshP/nvim-navbuddy",
+        opts = { lsp = { auto_attach = true } },
+      },
+    },
+    config = function()
+      require("nvchad.configs.lspconfig").defaults()
+      require "configs.lspconfig"
+    end,
+  },
+  { "nvim-tree/nvim-web-devicons",
+    config = function ()
+      require("nvim-web-devicons")
+    end
+  },
+  {
     "goolord/alpha-nvim",
     dependencies = { "nvim-tree/nvim-web-devicons" },
     lazy = false,
     config = function()
       require "configs.alpha"
     end,
-  },
-  -- { 'echasnovski/mini.jump',
-  --   version = false,
-  --   lazy = false,
-  --   config = function ()
-  --     require 'configs.mini'
-  --   end
-  -- },
-  {
-    "folke/flash.nvim",
-    event = "VeryLazy",
-    -- ---@type Flash.Config
-    -- opts = {},
-    -- stylua: ignore
-    -- keys = {
-    --   { "s",     mode = { "n", "x", "o" }, function() require("flash").jump() end,              desc = "Flash" },
-    --   { "S",     mode = { "n", "x", "o" }, function() require("flash").treesitter() end,        desc = "Flash Treesitter" },
-    --   { "r",     mode = "o",               function() require("flash").remote() end,            desc = "Remote Flash" },
-    --   { "R",     mode = { "o", "x" },      function() require("flash").treesitter_search() end, desc = "Treesitter Search" },
-    --   { "<c-s>", mode = { "c" },           function() require("flash").toggle() end,            desc = "Toggle Flash Search" },
-    -- },
-    config = function()
-      require "configs.flash"
-    end
-    ,
   },
   {
     "kylechui/nvim-surround",
@@ -157,8 +163,6 @@ return {
     dependencies = {
       "nvim-lua/plenary.nvim",  -- required
       "sindrets/diffview.nvim", -- optional - Diff integration
-
-      -- Only one of these is needed, not both.
       "ibhagwan/fzf-lua", -- optional
     },
     config = function()
@@ -169,6 +173,9 @@ return {
     keys = {
       { "<leader>gg", "<cmd>Neogit<cr>", desc = "LazyGit" },
     },
+  },
+  {
+    'nvim-lua/plenary.nvim'
   },
   {
     "ruifm/gitlinker.nvim",
@@ -222,17 +229,17 @@ return {
       require "configs.trouble"
     end,
   },
-  {
-    "AckslD/nvim-neoclip.lua",
-    dependencies = {
-      -- you'll need at least one of these
-      -- {'nvim-telescope/telescope.nvim'},
-      "ibhagwan/fzf-lua",
-    },
-    config = function()
-      require "configs.neoclip"
-    end,
-  },
+  -- {
+  --   "AckslD/nvim-neoclip.lua",
+  --   dependencies = {
+  --     -- you'll need at least one of these
+  --     -- {'nvim-telescope/telescope.nvim'},
+  --     "ibhagwan/fzf-lua",
+  --   },
+  --   config = function()
+  --     require "configs.neoclip"
+  --   end,
+  -- },
   {
     "ray-x/lsp_signature.nvim",
     event = "VeryLazy",
@@ -246,23 +253,6 @@ return {
     opts = {
       -- add any options here
     },
-  },
-  {
-    "SmiteshP/nvim-navbuddy",
-    cmd = "Navbuddy",
-    config = function()
-      require "configs.navbuddy"
-    end,
-    keys = {
-      {
-        "gs",
-        function()
-          require("nvim-navbuddy").open()
-        end,
-        desc = "open navbuddy",
-      },
-    },
-
   },
   -- {
   --   "ray-x/navigator.lua",
@@ -305,10 +295,6 @@ return {
     end,
   },
   {
-    "willothy/wezterm.nvim",
-    config = true,
-  },
-  {
     "Olical/conjure",
     cmd = "ConjureSchool",
     config = function()
@@ -342,24 +328,11 @@ return {
     end,
   },
   {
-    'kristijanhusak/vim-dadbod-ui',
-    dependencies = {
-      { 'tpope/vim-dadbod',                     lazy = true },
-      { 'kristijanhusak/vim-dadbod-completion', ft = { 'sql', 'mysql', 'plsql' }, lazy = true }, -- Optional
-    },
-    cmd = {
-      'DBUI',
-      'DBUIToggle',
-      'DBUIAddConnection',
-      'DBUIFindBuffer',
-    },
-    init = function()
-      -- Your DBUI configuration
-      vim.g.db_ui_use_nerd_fonts = 1
-      vim.g.db_ui_env_variable_url = "https://www.googleapis.com/bigquery/v2:443?format=sparse&use_legacy_sql=false"
-      vim.g.db_ui_auto_execute_table_helpers = 1
-      -- vim.g.db_ui_execute_on_save = 0
-    end,
+    'MeanderingProgrammer/render-markdown.nvim',
+    dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+    ---@module 'render-markdown'
+    ---@type render.md.UserConfig
+    opts = {},
   },
   {
     "nvim-tree/nvim-tree.lua",

@@ -205,6 +205,7 @@ require('nvim-tree').setup({
       if not fzf then
         return
       end
+      api.tree.close()
       fzf.files({
         prompt_title = "find file under: " .. relative_path,
         cwd = relative_path,
