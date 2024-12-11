@@ -131,24 +131,24 @@ return {
       }
     end,
   },
-  {
-    "nvim-telescope/telescope.nvim",
-    -- enabled = false,
-    pts = { extensions_list = { "fzf", "projects" } },
-    dependencies = {
-      { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
-    },
-    -- config = function()
-    --   require('telescope').setup {
-    --     defaults = {
-    --       previewer = true,
-    --       file_previewer = require 'telescope.previewers'.vim_buffer_cat.new,
-    --       grep_previewer = require 'telescope.previewers'.vim_buffer_vimgrep.new,
-    --       qflist_previewer = require 'telescope.previewers'.vim_buffer_qflist.new,
-    --     }
-    --   }
-    -- end
-  },
+  -- {
+  --   "nvim-telescope/telescope.nvim",
+  --   -- enabled = false,
+  --   pts = { extensions_list = { "fzf", "projects" } },
+  --   dependencies = {
+  --     { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+  --   },
+  --   -- config = function()
+  --   --   require('telescope').setup {
+  --   --     defaults = {
+  --   --       previewer = true,
+  --   --       file_previewer = require 'telescope.previewers'.vim_buffer_cat.new,
+  --   --       grep_previewer = require 'telescope.previewers'.vim_buffer_vimgrep.new,
+  --   --       qflist_previewer = require 'telescope.previewers'.vim_buffer_qflist.new,
+  --   --     }
+  --   --   }
+  --   -- end
+  -- },
   {
     "ibhagwan/fzf-lua",
     dependencies = { "nvim-tree/nvim-web-devicons" }, -- optional for icon support
@@ -157,6 +157,7 @@ return {
       require "configs.fzflua"
     end,
   },
+  {"sindrets/diffview.nvim"},
   {
     "NeogitOrg/neogit",
     cmd = "Neogit",
@@ -180,7 +181,6 @@ return {
   {
     "ruifm/gitlinker.nvim",
     dependencies = { "nvim-lua/plenary.nvim" },
-    -- cmd = "Gitlinker",
     config = function()
       require("gitlinker").setup {}
     end,
@@ -229,17 +229,6 @@ return {
       require "configs.trouble"
     end,
   },
-  -- {
-  --   "AckslD/nvim-neoclip.lua",
-  --   dependencies = {
-  --     -- you'll need at least one of these
-  --     -- {'nvim-telescope/telescope.nvim'},
-  --     "ibhagwan/fzf-lua",
-  --   },
-  --   config = function()
-  --     require "configs.neoclip"
-  --   end,
-  -- },
   {
     "ray-x/lsp_signature.nvim",
     event = "VeryLazy",
@@ -368,6 +357,9 @@ return {
     end
   },
   {
+    "Shatur/neovim-session-manager",
+  },
+  {
     "coffebar/neovim-project",
     init = function()
       -- enable saving the state of plugins in the session
@@ -379,7 +371,7 @@ return {
     dependencies = {
       { "nvim-lua/plenary.nvim" },
       -- optional picker
-      { "nvim-telescope/telescope.nvim", tag = "0.1.4" },
+      -- { "nvim-telescope/telescope.nvim", tag = "0.1.4" },
       -- optional picker
       { "ibhagwan/fzf-lua" },
       { "Shatur/neovim-session-manager" },
@@ -392,8 +384,7 @@ return {
     cmd = "Octo",
     requires = {
       'nvim-lua/plenary.nvim',
-      'nvim-telescope/telescope.nvim',
-      -- OR 'ibhagwan/fzf-lua',
+      'ibhagwan/fzf-lua',
       'nvim-tree/nvim-web-devicons',
     },
     config = function()
