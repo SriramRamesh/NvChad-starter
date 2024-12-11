@@ -42,7 +42,6 @@ local function browse_directory(current_dir, directory_fn)
 
           -- Append the selected path to the file
           directory_fn(abs_path)
-
         end
       end,
     },
@@ -67,8 +66,6 @@ local function choose_directory()
   local function directory_fn(abs_path)
     vim.cmd("cd " .. abs_path)
     vim.print("change directory in vim " .. abs_path)
-    notify("Changed directory to: " .. tostring(abs_path), vim.log.levels.INFO)
-
   end
   -- Start browsing from the current working directory
   local current_dir = vim.fn.getcwd()
@@ -404,7 +401,7 @@ fzf.setup {
   -- use `defaults` (table or function) if you wish to set "global-provider" defaults
   -- for example, using "mini.icons" globally and open the quickfix list at the top
   defaults = {
-    formatter      = "path.filename_first",
+    formatter = "path.filename_first",
   },
   --   defaults = {
   --     file_icons   = "mini",
@@ -415,10 +412,10 @@ fzf.setup {
     -- (name from 'previewers' table)
     -- set to 'false' to disable
     prompt                 = 'Files❯ ',
-    multiprocess           = true, -- run command in a separate process
-    git_icons              = false, -- show git icons?
+    multiprocess           = true,       -- run command in a separate process
+    git_icons              = false,      -- show git icons?
     file_icons             = "devicons", -- show file icons (true|"devicons"|"mini")?
-    color_icons            = false, -- colorize file|git icons
+    color_icons            = false,      -- colorize file|git icons
     -- path_shorten   = 1,              -- 'true' or number, shorten path?
     -- Uncomment for custom vscode-like formatter where the filename is first:
     -- e.g. "fzf-lua/previewer/fzf.lua" => "fzf.lua previewer/fzf-lua"
@@ -493,7 +490,7 @@ fzf.setup {
     commits = {
       prompt  = 'Commits❯ ',
       cmd     = [[git log --color --pretty=format:"%C(yellow)%h%Creset ]]
-        .. [[%Cgreen(%><(12)%cr%><|(12))%Creset %s %C(blue)<%an>%Creset"]],
+          .. [[%Cgreen(%><(12)%cr%><|(12))%Creset %s %C(blue)<%an>%Creset"]],
       preview = "git show --color {1}",
       -- git-delta is automatically detected as pager, uncomment to disable
       -- preview_pager = false,
@@ -511,7 +508,7 @@ fzf.setup {
       --   {1}    : commit SHA (fzf field index expression)
       --   {file} : filepath placement within the commands
       cmd     = [[git log --color --pretty=format:"%C(yellow)%h%Creset ]]
-        .. [[%Cgreen(%><(12)%cr%><|(12))%Creset %s %C(blue)<%an>%Creset" {file}]],
+          .. [[%Cgreen(%><(12)%cr%><|(12))%Creset %s %C(blue)<%an>%Creset" {file}]],
       preview = "git show --color {1} -- {file}",
       -- git-delta is automatically detected as pager, uncomment to disable
       -- preview_pager = false,
@@ -556,11 +553,11 @@ fzf.setup {
     tags = {
       prompt  = "Tags> ",
       cmd     = [[git for-each-ref --color --sort="-taggerdate" --format ]]
-        .. [["%(color:yellow)%(refname:short)%(color:reset) ]]
-        .. [[%(color:green)(%(taggerdate:relative))%(color:reset)]]
-        .. [[ %(subject) %(color:blue)%(taggername)%(color:reset)" refs/tags]],
+          .. [["%(color:yellow)%(refname:short)%(color:reset) ]]
+          .. [[%(color:green)(%(taggerdate:relative))%(color:reset)]]
+          .. [[ %(subject) %(color:blue)%(taggername)%(color:reset)" refs/tags]],
       preview = [[git log --graph --color --pretty=format:"%C(yellow)%h%Creset ]]
-        .. [[%Cgreen(%><(12)%cr%><|(12))%Creset %s %C(blue)<%an>%Creset" {1}]],
+          .. [[%Cgreen(%><(12)%cr%><|(12))%Creset %s %C(blue)<%an>%Creset" {1}]],
       actions = { ["enter"] = actions.git_checkout },
     },
     stash = {
@@ -817,7 +814,7 @@ fzf.setup {
     -- path_shorten   = true,              -- 'true' or number, shorten path?
     -- to override use 'prompt' instead
     cwd_only           = false, -- LSP/diagnostics for cwd only?
-    async_or_timeout   = 5000, -- timeout(ms) or 'true' for async calls
+    async_or_timeout   = 5000,  -- timeout(ms) or 'true' for async calls
     file_icons         = true,
     git_icons          = false,
     -- The equivalent of using `includeDeclaration` in lsp buf calls, e.g:

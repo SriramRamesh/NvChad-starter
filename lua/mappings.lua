@@ -47,10 +47,6 @@ map("i", "<C-S-tab>", function()
   require("nvchad.tabufline").prev()
 end, { desc = "buffer goto prev" })
 
-map("n", "[c", function()
-  require("treesitter-context").go_to_context(vim.v.count1)
-end, { silent = true })
-
 
 local M = {}
 
@@ -65,10 +61,20 @@ M.general = {
     ["<leader>ws"] = { "<cmd> split <CR>", "Window split horizontal" },
     ["<leader>bN"] = { "<cmd> enew <CR>", "New buffer" },
     ["<leader>bs"] = { "<cmd> w <CR>", "New buffer" },
+    ["yf"]         = { ":%y+<CR>", "Copy entire file to clipboard" },
     ['<leader>yp'] = { function() vim.fn.setreg('+', vim.fn.expand('%:p:.')) end, desc = 'Yank file path' },
     ['<leader>yd'] = { function() vim.fn.setreg('+', vim.fn.expand('%:h')) end, desc = 'Yank directory path' },
     ['<leader>yf'] = { function() vim.fn.setreg('+', vim.fn.expand('%:t')) end, desc = 'Yank file name' },
     ['<leader>th'] = { function() require('nvchad.themes').open() end, desc = 'Theme switcher' }
+  }
+}
+
+M.lua = {
+  n = {
+    ["<leader>lf"] = { ":luafile %<CR>", "Run the file" },
+  },
+  v = {
+    ["<leader>lv"] = { ":luafile<CR>", "Run the file" },
   }
 }
 
@@ -134,10 +140,10 @@ M.Gitlinker = {
 
 M.NeovimProject = {
   n = {
-    ["<leader>pp"] = { "<cmd> NeovimProjectDiscover <CR>","Discover Projects" },
-    ["<leader>pr"] = { "<cmd> NeovimProjectLoadRecent <CR>","Load Recent Projects" },
-    ["<leader>px"] = { function () require("nvchad.tabufline").closeAllBufs(true) end, "Close all buffers"},
-    ["<leader>po"] = { function () require("nvchad.tabufline").closeAllBufs(false) end, "Close other buffers"},
+    ["<leader>pp"] = { "<cmd> NeovimProjectDiscover <CR>", "Discover Projects" },
+    ["<leader>pr"] = { "<cmd> NeovimProjectLoadRecent <CR>", "Load Recent Projects" },
+    ["<leader>px"] = { function() require("nvchad.tabufline").closeAllBufs(true) end, "Close all buffers" },
+    ["<leader>po"] = { function() require("nvchad.tabufline").closeAllBufs(false) end, "Close other buffers" },
     -- ["<leader>p1"] = { function () require("nvchad.tabufline").closeAllBufs(false) end, "Close other buffers"},
     --   local cwd = vim.fn.getcwd()
     --   vim.opts.
@@ -165,9 +171,9 @@ end
 -- map("n", "ss", require("substitute").line, {desc = "substitute line"})
 -- map("n", "S", require("substitute").eol, {desc = "substitute eol"})
 -- map("x", "s", require("substitute").visual, {desc = "substitute visual"})
-map("n", "gx", require("substitute.exchange").operator, {desc = "substitute.exchange operator"})
-map("n", "gX", require("substitute.exchange").line, {desc = "substitute.exchange line"})
-map("x", "gx", require("substitute.exchange").visual, {desc = "substitute.exchange visual"})
+map("n", "gx", require("substitute.exchange").operator, { desc = "substitute.exchange operator" })
+map("n", "gX", require("substitute.exchange").line, { desc = "substitute.exchange line" })
+map("x", "gx", require("substitute.exchange").visual, { desc = "substitute.exchange visual" })
 
 map("i", "jk", "<ESC>")
 
@@ -175,6 +181,55 @@ map("i", "jk", "<ESC>")
 map("n", "<leader>;", "<cmd> NvimTreeToggle <CR>", { desc = "nvimtree toggle window" })
 map("n", "<leader>.", "<cmd>NvimTreeFocus<CR>", { desc = "nvimtree focus window" })
 
+
+-- Keymap to manually format the file with Conform
 map("n", "<leader>bf", function()
   require("conform").format { lsp_fallback = true }
-end, { desc = "format files" })
+end, { desc = "Format file" })
+
+-- Auto-format on save
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*", -- Apply to all file types; you can customize this with patterns like "*.lua", "*.js", etc.
+  callback = function()
+    require("conform").format { lsp_fallback = true }
+  end,
+  desc = "Auto-format on save with Conform",
+})
+
+
+
+local ts_repeat_move = require "nvim-treesitter.textobjects.repeatable_move"
+
+-- Repeat movement with ; and ,
+-- ensure ; goes forward and , goes backward regardless of the last direction
+map({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move_next)
+map({ "n", "x", "o" }, ",", ts_repeat_move.repeat_last_move_previous)
+
+-- vim way: ; goes to the direction you were moving.
+-- map({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move)
+-- map({ "n", "x", "o" }, ",", ts_repeat_move.repeat_last_move_opposite)
+
+-- Optionally, make builtin f, F, t, T also repeatable with ; and ,
+map({ "n", "x", "o" }, "f", ts_repeat_move.builtin_f_expr, { expr = true })
+map({ "n", "x", "o" }, "F", ts_repeat_move.builtin_F_expr, { expr = true })
+map({ "n", "x", "o" }, "t", ts_repeat_move.builtin_t_expr, { expr = true })
+map({ "n", "x", "o" }, "T", ts_repeat_move.builtin_T_expr, { expr = true })
+
+-- This repeats the last query with always previous direction and to the start of the range.
+map({ "n", "x", "o" }, "<home>", function()
+  ts_repeat_move.repeat_last_move({ forward = false, start = true })
+end)
+
+-- This repeats the last query with always next direction and to the end of the range.
+map({ "n", "x", "o" }, "<end>", function()
+  ts_repeat_move.repeat_last_move({ forward = true, start = false })
+end)
+-- example: make gitsigns.nvim movement repeatable with ; and , keys.
+local gs = require("gitsigns")
+
+-- make sure forward function comes first
+local next_hunk_repeat, prev_hunk_repeat = ts_repeat_move.make_repeatable_move_pair(gs.next_hunk, gs.prev_hunk)
+-- Or, use `make_repeatable_move` or `set_last_move` functions for more control. See the code for instructions.
+
+map({ "n", "x", "o" }, "]h", next_hunk_repeat)
+map({ "n", "x", "o" }, "[h", prev_hunk_repeat)

@@ -8,12 +8,12 @@ local navbuddy = require "nvim-navbuddy"
 local lsp_configs = require('lspconfig.configs')
 lsp_configs.pbls = {
   default_config = {
-    cmd = { "pbls"},
+    cmd = { "pbls" },
     filetypes = { "proto" },
     -- single_file_support = true,
     -- root_dir = function() end,
     root_dir = function(fname)
-      return util.root_pattern( '.git')(fname)
+      return util.root_pattern('.git')(fname)
     end,
   },
 }
@@ -61,6 +61,7 @@ local servers = {
         },
         diagnostics = {
           -- Get the language server to recognize the `vim` global
+          disable = { 'missing-fields' },
           globals = { "vim" },
         },
         workspace = {
