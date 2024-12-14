@@ -69,6 +69,17 @@ M.general = {
   }
 }
 
+M.Twilight = {
+  n = {
+    ['<leader>T'] = {
+      function()
+        require("twilight").toggle()
+      end,
+      desc = 'twilight toggle'
+    },
+  }
+}
+
 M.lua = {
   n = {
     ["<leader>lf"] = { ":luafile %<CR>", "Run the file" },
@@ -83,6 +94,9 @@ M.FzfLua = {
     -- find
     ["<leader><leader>"] = { "<cmd>FzfLua files<CR>", "Find files" },
     ["<leader>sp"] = { "<cmd> FzfLua live_grep_glob git_icons=false <CR>", "Live grep glob" },
+    ["<leader>fp"] = { function()
+      require("fzf-lua").files({ cwd = vim.fn.stdpath("config") })
+    end, "Find files in config directory" },
     ["<leader>sn"] = { "<cmd> FzfLua live_grep_native git_icons=false <CR>", "Live grep glob" },
     ["<leader>sw"] = { "<cmd> FzfLua grep_cword <CR>", "grep current word" },
     ["<leader>sW"] = { "<cmd> FzfLua grep_cWORD <CR>", "grep curent WORD" },
@@ -188,13 +202,13 @@ map("n", "<leader>bf", function()
 end, { desc = "Format file" })
 
 -- Auto-format on save
-vim.api.nvim_create_autocmd("BufWritePre", {
-  pattern = "*", -- Apply to all file types; you can customize this with patterns like "*.lua", "*.js", etc.
-  callback = function()
-    require("conform").format { lsp_fallback = true }
-  end,
-  desc = "Auto-format on save with Conform",
-})
+-- vim.api.nvim_create_autocmd("BufWritePre", {
+--   pattern = "*", -- Apply to all file types; you can customize this with patterns like "*.lua", "*.js", etc.
+--   callback = function()
+--     require("conform").format { lsp_fallback = true }
+--   end,
+--   desc = "Auto-format on save with Conform",
+-- })
 
 
 

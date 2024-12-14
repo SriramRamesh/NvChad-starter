@@ -19,6 +19,9 @@ M.base46 = {
     Visual = {
       bg = { "one_bg3", 2 },
     },
+
+    -- Use this for ignoring the warning in vscode
+    NotifyBackgroundx = { fg = "#ced6e3", bg = "#011627" },
     -- IncSearch = {
     --   bg = { "orange", 0}
     -- },

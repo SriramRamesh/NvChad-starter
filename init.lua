@@ -3,7 +3,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.opt.relativenumber = true
 vim.o.guifont = "JetBrainsMono Nerd Font:h16:#h-slight" -- Source Code Pro:h12:#h-slight
-vim.o.cmdheight=0
+vim.o.cmdheight = 0
 -- vim.opt.inccommand = "split"
 -- bootstrap lazy and all plugins
 local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
@@ -53,11 +53,12 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+vim.api.nvim_command('autocmd BufNewFile,BufRead *.fs,*.fsx,*.fsi,*.fsl,*.fsy set filetype=fsharp')
 
 if vim.g.neovide then
   -- Allow clipboard copy paste in neovim
   vim.keymap.set(
-    {'n', 'v', 's', 'x', 'o', 'i', 'l', 'c', 't'},
+    { 'n', 'v', 's', 'x', 'o', 'i', 'l', 'c', 't' },
     '<D-v>',
     function() vim.api.nvim_paste(vim.fn.getreg('+'), true, -1) end,
     { noremap = true, silent = true }
@@ -70,9 +71,7 @@ if vim.g.neovide then
   vim.g.neovide_cursor_animate_command_line = false
   vim.g.neovide_scroll_animation_far_lines = 0
   vim.g.neovide_scroll_animation_length = 0.00
-  
+
   local home_dir = vim.fn.expand("~")
   vim.cmd("cd " .. home_dir)
-
-
 end

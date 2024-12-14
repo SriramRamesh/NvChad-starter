@@ -52,6 +52,37 @@ local servers = {
   -- buf = {},
   pbls = {},
   ts_ls = {},
+  fsautocomplete = {
+    default_config = {
+      cmd = { 'fsautocomplete', '--adaptive-lsp-server-enabled' },
+      root_dir = util.root_pattern('*.sln', '*.fsproj', '.git'),
+      filetypes = { 'fsharp' },
+      init_options = {
+        AutomaticWorkspaceInit = true,
+      },
+      -- this recommended settings values taken from  https://github.com/ionide/FsAutoComplete?tab=readme-ov-file#settings
+      settings = {
+        FSharp = {
+          keywordsAutocomplete = true,
+          ExternalAutocomplete = false,
+          Linter = true,
+          UnionCaseStubGeneration = true,
+          UnionCaseStubGenerationBody = 'failwith "Not Implemented"',
+          RecordStubGeneration = true,
+          RecordStubGenerationBody = 'failwith "Not Implemented"',
+          InterfaceStubGeneration = true,
+          InterfaceStubGenerationObjectIdentifier = 'this',
+          InterfaceStubGenerationMethodBody = 'failwith "Not Implemented"',
+          UnusedOpensAnalyzer = true,
+          UnusedDeclarationsAnalyzer = true,
+          UseSdkScripts = true,
+          SimplifyNameAnalyzer = true,
+          ResolveNamespaces = true,
+          EnableReferenceCodeLens = true,
+        },
+      },
+    },
+  },
   lua_ls = {
     settings = {
       Lua = {
@@ -68,12 +99,12 @@ local servers = {
           -- Make the server aware of Neovim runtime files
           library = vim.api.nvim_get_runtime_file("", true),
           checkThirdParty = false,
-          -- library = {
-          --   vim.env.VIMRUNTIME
-          --   -- Depending on the usage, you might want to add additional paths here.
-          --   -- "${3rd}/luv/library"
-          --   -- "${3rd}/busted/library",
-          -- },
+          library = {
+            vim.env.VIMRUNTIME,
+            --   -- Depending on the usage, you might want to add additional paths here.
+            "${3rd}/luv/library"
+            --   -- "${3rd}/busted/library",
+          },
         },
         -- Do not send telemetry data containing a randomized but unique identifier
         telemetry = {
