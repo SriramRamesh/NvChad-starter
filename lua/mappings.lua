@@ -80,12 +80,21 @@ M.Twilight = {
   }
 }
 
+-- User command to run selected Lua code in visual mode
+vim.api.nvim_create_user_command("RunLuaRegion", function()
+  local start_line = vim.fn.line("'<")
+  local end_line = vim.fn.line("'>")
+  local lines = vim.fn.getline(start_line, end_line)
+  local code = table.concat(lines, "\n")
+  load(code)()
+end, { range = true })
+
 M.lua = {
   n = {
-    ["<leader>lf"] = { ":luafile %<CR>", "Run the file" },
+    ["<leader>lx"] = { ":luafile %<CR>", "Run the file" },
   },
   v = {
-    ["<leader>lv"] = { ":luafile<CR>", "Run the file" },
+    ["<leader>lx"] = { ":RunLuaRegion<CR>", "Run the region" },
   }
 }
 
@@ -154,8 +163,8 @@ M.Gitlinker = {
 
 M.NeovimProject = {
   n = {
-    ["<leader>pp"] = { "<cmd> NeovimProjectDiscover <CR>", "Discover Projects" },
-    ["<leader>pr"] = { "<cmd> NeovimProjectLoadRecent <CR>", "Load Recent Projects" },
+    -- ["<leader>pp"] = { "<cmd> NeovimProjectDiscover <CR>", "Discover Projects" },
+    -- ["<leader>pr"] = { "<cmd> NeovimProjectLoadRecent <CR>", "Load Recent Projects" },
     ["<leader>px"] = { function() require("nvchad.tabufline").closeAllBufs(true) end, "Close all buffers" },
     ["<leader>po"] = { function() require("nvchad.tabufline").closeAllBufs(false) end, "Close other buffers" },
     -- ["<leader>p1"] = { function () require("nvchad.tabufline").closeAllBufs(false) end, "Close other buffers"},

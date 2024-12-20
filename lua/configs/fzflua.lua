@@ -49,19 +49,6 @@ local function browse_directory(current_dir, directory_fn)
 end
 
 
--- Function to browse directories and append the selected path to a file
-local function append_selected_directory_to_file()
-  local function directory_fn(abs_path)
-    utils.append_path_to_file(abs_path, target_filepath)
-  end
-  -- Start browsing from the current working directory
-  -- Get the home directory path
-  local current_dir = vim.fn.getcwd()
-  browse_directory(current_dir, directory_fn)
-end
-
-vim.keymap.set("n", "<leader>pa", append_selected_directory_to_file, { desc = "Choose a directory with fzf-lua" })
-
 local function choose_directory()
   local function directory_fn(abs_path)
     vim.cmd("cd " .. abs_path)
@@ -354,7 +341,6 @@ fzf.setup {
       -- enable specific filetypes with: `{ enable = { "lua" } }
       -- exclude specific filetypes with: `{ disable = { "lua" } }
       -- disable fully with: `{ enable = false }`
-      treesitter      = { enable = true, disable = {} },
       -- By default, the main window dimensions are calculated as if the
       -- preview is visible, when hidden the main window will extend to
       -- full size. Set the below to "extend" to prevent the main window

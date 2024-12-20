@@ -26,12 +26,12 @@ dashboard.config.layout[1].val = vim.fn.max { 2, vim.fn.floor(vim.fn.winheight(0
 dashboard.config.layout[3].val = 3
 dashboard.config.opts.noautocmd = true
 dashboard.section.buttons.val = {
-  dashboard.button("SPC p p", "󰝰  Open Project"),
-  dashboard.button("SPC p r", "󰈸  Recent Project"),
-  dashboard.button("SPC p a", "  Add Project"),
+  -- dashboard.button("SPC p p", "󰝰  Open Project"),
+  -- dashboard.button("SPC p r", "󰈸  Recent Project"),
+  -- dashboard.button("SPC p a", "  Add Project"),
+  dashboard.button("SPC SPC", "󰈞  Find file"),
   dashboard.button("SPC f r", "  Recently opened files"),
   dashboard.button("SPC s p", "󰍉  Search in Project"),
-  dashboard.button("SPC SPC", "󰈞  Find file"),
   dashboard.button("SPC f j", "  Goto Jumps"),
   dashboard.button("SPC s s", "  Run Swiper"),
 }
@@ -47,21 +47,20 @@ vim.api.nvim_create_autocmd({ "User" }, {
     local ms = math.floor(stats.startuptime * 100 + 0.5) / 100
     dashboard.section.footer.val = {
       "   Have Fun with NvChad"
-        .. "  󰀨 v"
-        .. vim.version().major
-        .. "."
-        .. vim.version().minor
-        .. "."
-        .. vim.version().patch
-        .. "  ⚡NvChad loaded "
-        .. stats.count
-        .. " plugins  in "
-        .. ms
-        .. "ms",
+      .. "  󰀨 v"
+      .. vim.version().major
+      .. "."
+      .. vim.version().minor
+      .. "."
+      .. vim.version().patch
+      .. "  ⚡NvChad loaded "
+      .. stats.count
+      .. " plugins  in "
+      .. ms
+      .. "ms",
     }
     dashboard.section.footer.opts.hl = "DashboardFooter"
     pcall(vim.cmd.AlphaRedraw)
   end,
 })
 alpha.setup(dashboard.config)
-

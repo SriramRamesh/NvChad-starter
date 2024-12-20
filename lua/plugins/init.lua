@@ -294,25 +294,6 @@ return {
     end,
   },
   {
-    'nvim-orgmode/orgmode',
-    event = 'VeryLazy',
-    ft = { 'org' },
-    config = function()
-      -- Setup orgmode
-      require('orgmode').setup({
-        org_agenda_files = '~/org/**/*',
-        org_default_notes_file = '~/org/refile.org',
-      })
-
-      -- NOTE: If you are using nvim-treesitter with ~ensure_installed = "all"~ option
-      -- add ~org~ to ignore_install
-      -- require('nvim-treesitter.configs').setup({
-      --   ensure_installed = 'all',
-      --   ignore_install = { 'org' },
-      -- })
-    end,
-  },
-  {
     'MeanderingProgrammer/render-markdown.nvim',
     dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
     ---@module 'render-markdown'
@@ -351,29 +332,6 @@ return {
     config = function()
       require("configs.indent-blankline")
     end
-  },
-  {
-    "Shatur/neovim-session-manager",
-  },
-  {
-    "coffebar/neovim-project",
-    init = function()
-      -- enable saving the state of plugins in the session
-      vim.opt.sessionoptions:append("globals") -- save global variables that start with an uppercase letter and contain at least one lowercase letter.
-    end,
-    config = function()
-      require("configs.neovim-project")
-    end,
-    dependencies = {
-      { "nvim-lua/plenary.nvim" },
-      -- optional picker
-      -- { "nvim-telescope/telescope.nvim", tag = "0.1.4" },
-      -- optional picker
-      { "ibhagwan/fzf-lua" },
-      { "Shatur/neovim-session-manager" },
-    },
-    lazy = false,
-    priority = 100,
   },
   {
     'pwntester/octo.nvim',
