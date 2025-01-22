@@ -198,6 +198,5 @@ for name, opts in pairs(servers) do
   -- opts.on_attach = configs.on_attach
   opts.on_attach = on_attach
   opts.capabilities = configs.capabilities
-
   lspconfig[name].setup(opts)
 end

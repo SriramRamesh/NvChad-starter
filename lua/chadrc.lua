@@ -6,7 +6,7 @@ local M = {}
 
 M.base46 = {
   -- theme = "ayu-dark",
-  theme = "nightowl",
+  theme = "chadracula-evondev",
   hl_add = {
     CurSearch = {
       bg = "orange",

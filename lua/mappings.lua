@@ -65,7 +65,8 @@ M.general = {
     ['<leader>yp'] = { function() vim.fn.setreg('+', vim.fn.expand('%:p:.')) end, desc = 'Yank file path' },
     ['<leader>yd'] = { function() vim.fn.setreg('+', vim.fn.expand('%:h')) end, desc = 'Yank directory path' },
     ['<leader>yf'] = { function() vim.fn.setreg('+', vim.fn.expand('%:t')) end, desc = 'Yank file name' },
-    ['<leader>th'] = { function() require('nvchad.themes').open() end, desc = 'Theme switcher' }
+    ['<leader>th'] = { function() require('nvchad.themes').open() end, desc = 'Theme switcher' },
+    ['<leader>jq'] = { "<cmd>%! jq .<CR>", desc = 'JQ formatter' }
   }
 }
 
