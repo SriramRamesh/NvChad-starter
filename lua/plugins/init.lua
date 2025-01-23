@@ -90,6 +90,7 @@ return {
   },
   {
     "neovim/nvim-lspconfig",
+    event = "User FilePost",
     dependencies = {
       {
         "SmiteshP/nvim-navbuddy",
@@ -349,6 +350,25 @@ return {
     'rcarriga/nvim-notify',
     config = function()
       require("notify").setup({})
+      vim.api.nvim_create_user_command("RunCommand", function(opts)
+        local command = opts.args
+        vim.fn.jobstart(command, {
+          stdout_buffered = true,
+          on_stdout = function(_, data)
+            if data then
+              require("notify")(table.concat(data, "\n"))
+            end
+          end,
+          on_stderr = function(_, data)
+            if data then
+              require("notify")("Error: " .. table.concat(data, "\n"), "error")
+            end
+          end,
+        })
+      end, { nargs = 1 })
+
+      -- Example usage:
+      -- :RunCommand ls -la
     end
   },
   {

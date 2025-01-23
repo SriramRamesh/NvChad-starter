@@ -2,7 +2,6 @@ require "nvchad.options"
 
 -- add yours here!
 vim.opt.clipboard = { "unnamed", "unnamedplus" }
-vim.g.python3_host_prog = "/Users/sriram/miniconda3/envs/env/bin/python"
 -- vim.g.python3_host_prog = "/Users/sriram/.pyenv/shims/python"
 
 -- local o = vim.o

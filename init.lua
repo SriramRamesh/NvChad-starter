@@ -4,6 +4,7 @@ vim.g.maplocalleader = " "
 vim.opt.relativenumber = true
 vim.o.guifont = "JetBrainsMono Nerd Font:h16:#h-slight" -- Source Code Pro:h12:#h-slight
 vim.o.cmdheight = 0
+-- vim.env.PYENV_VERSION = vim.fn.system('pyenv version'):match('(%S+)%s+%(.-%)')
 -- vim.opt.inccommand = "split"
 -- bootstrap lazy and all plugins
 local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"

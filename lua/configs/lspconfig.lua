@@ -5,7 +5,7 @@ local lspconfig = require "lspconfig"
 local util = require "lspconfig/util"
 local navbuddy = require "nvim-navbuddy"
 
-local lsp_configs = require('lspconfig.configs')
+local lsp_configs = require "lspconfig.configs"
 lsp_configs.pbls = {
   default_config = {
     cmd = { "pbls" },
@@ -13,7 +13,7 @@ lsp_configs.pbls = {
     -- single_file_support = true,
     -- root_dir = function() end,
     root_dir = function(fname)
-      return util.root_pattern('.git')(fname)
+      return util.root_pattern ".git" (fname)
     end,
   },
 }
@@ -54,9 +54,9 @@ local servers = {
   ts_ls = {},
   fsautocomplete = {
     default_config = {
-      cmd = { 'fsautocomplete', '--adaptive-lsp-server-enabled' },
-      root_dir = util.root_pattern('*.sln', '*.fsproj', '.git'),
-      filetypes = { 'fsharp' },
+      cmd = { "fsautocomplete", "--adaptive-lsp-server-enabled" },
+      root_dir = util.root_pattern("*.sln", "*.fsproj", ".git"),
+      filetypes = { "fsharp" },
       init_options = {
         AutomaticWorkspaceInit = true,
       },
@@ -71,7 +71,7 @@ local servers = {
           RecordStubGeneration = true,
           RecordStubGenerationBody = 'failwith "Not Implemented"',
           InterfaceStubGeneration = true,
-          InterfaceStubGenerationObjectIdentifier = 'this',
+          InterfaceStubGenerationObjectIdentifier = "this",
           InterfaceStubGenerationMethodBody = 'failwith "Not Implemented"',
           UnusedOpensAnalyzer = true,
           UnusedDeclarationsAnalyzer = true,
@@ -92,7 +92,7 @@ local servers = {
         },
         diagnostics = {
           -- Get the language server to recognize the `vim` global
-          disable = { 'missing-fields' },
+          disable = { "missing-fields" },
           globals = { "vim" },
         },
         workspace = {
@@ -102,7 +102,7 @@ local servers = {
           library = {
             vim.env.VIMRUNTIME,
             --   -- Depending on the usage, you might want to add additional paths here.
-            "${3rd}/luv/library"
+            "${3rd}/luv/library",
             --   -- "${3rd}/busted/library",
           },
         },
@@ -114,10 +114,13 @@ local servers = {
     },
   },
   -- sqlls = {},
+  -- pythonPath = vim.fn.exepath "python3",
+  -- venvPath = vim.fn.exepath "pyenv",
+  -- venv = "py37moloco",
 
   pyright = {
-    venvPath = "/Users/sriram/.pyenv/versions/",
-    venv = "py37moloco",
+    -- venvPath = "/Users/sriram/.pyenv/versions/",
+    -- venv = "3.11.7",
     settings = {
       python = {
         analysis = {
@@ -145,7 +148,6 @@ local servers = {
         },
       },
     },
-
   },
 }
 
@@ -155,28 +157,31 @@ local fzf_key_map = {
       function()
         require("fzf-lua").lsp_declarations { jump_to_single_result = true, silent = true }
       end,
-      "Lsp declaration" },
+      "Lsp declaration",
+    },
     ["gd"] = {
       function()
         require("fzf-lua").lsp_definitions { jump_to_single_result = true, silent = true }
       end,
-      "Lsp definitions" },
+      "Lsp definitions",
+    },
     ["gr"] = {
       function()
         require("fzf-lua").lsp_references { includeDeclaration = false, jump_to_single_result = true, silent = true }
       end,
-      "Lsp references" },
+      "Lsp references",
+    },
     ["gI"] = {
       function()
         require("fzf-lua").lsp_implementations { jump_to_single_result = true, silent = true }
       end,
-      "Lsp implementations" },
+      "Lsp implementations",
+    },
     ["gR"] = { vim.lsp.buf.rename, "Lsp Rename" },
     -- ["gT"] = { "<cmd>Trouble symbols toggle focus=true win.position=right<cr>", "Lsp symbols" },
     ["gS"] = { "<cmd>Trouble symbols toggle focus=true win.position=bottom<cr>", "Lsp symbols" },
   },
 }
-
 
 local function on_attach(client, bufnr)
   -- on_attach_nvchad(client, bufnr)
@@ -191,7 +196,6 @@ local function on_attach(client, bufnr)
   -- require("navigator.codeAction").code_action_prompt(bufnr)
   -- map("n")
 end
-
 
 for name, opts in pairs(servers) do
   opts.on_init = configs.on_init
