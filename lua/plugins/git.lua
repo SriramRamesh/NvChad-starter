@@ -26,4 +26,17 @@ return {
       { "<leader>gg", "<cmd>Neogit<cr>", desc = "LazyGit" },
     },
   },
+  { "tpope/vim-fugitive" },
+  {
+    "pwntester/octo.nvim",
+    cmd = "Octo",
+    requires = {
+      "nvim-lua/plenary.nvim",
+      "ibhagwan/fzf-lua",
+      "nvim-tree/nvim-web-devicons",
+    },
+    config = function()
+      require "configs.octo"
+    end,
+  },
 }

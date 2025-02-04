@@ -308,18 +308,6 @@ return {
     end,
   },
   {
-    "pwntester/octo.nvim",
-    cmd = "Octo",
-    requires = {
-      "nvim-lua/plenary.nvim",
-      "ibhagwan/fzf-lua",
-      "nvim-tree/nvim-web-devicons",
-    },
-    config = function()
-      require "configs.octo"
-    end,
-  },
-  {
     "rcarriga/nvim-notify",
     config = function()
       require("notify").setup {}
