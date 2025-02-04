@@ -26,7 +26,7 @@ return {
       { "<leader>gg", "<cmd>Neogit<cr>", desc = "LazyGit" },
     },
   },
-  { "tpope/vim-fugitive" },
+  { "tpope/vim-fugitive", lazy = false },
   {
     "pwntester/octo.nvim",
     cmd = "Octo",
