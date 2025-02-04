@@ -2,7 +2,7 @@ require "nvchad.options"
 
 -- add yours here!
 vim.opt.clipboard = { "unnamed", "unnamedplus" }
--- vim.g.python3_host_prog = "/Users/sriram/.pyenv/shims/python"
+vim.g.python3_host_prog = "/Users/sriram/.pyenv/shims/python"
 
 -- local o = vim.o
 -- o.cursorlineopt ='both' -- to enable cursorline!

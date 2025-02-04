@@ -39,7 +39,7 @@ return {
         "vimdoc",
         "xml",
         "yaml",
-        "fsharp"
+        "fsharp",
       },
       incremental_selection = {
         enable = true,
@@ -60,13 +60,13 @@ return {
     end,
   },
   {
-    'MunifTanjim/nui.nvim',
+    "MunifTanjim/nui.nvim",
   },
   {
-    'SmiteshP/nvim-navic',
+    "SmiteshP/nvim-navic",
     config = function()
-      require("nvim-navic").setup({})
-    end
+      require("nvim-navic").setup {}
+    end,
   },
   {
     "SmiteshP/nvim-navbuddy",
@@ -105,8 +105,8 @@ return {
   {
     "nvim-tree/nvim-web-devicons",
     config = function()
-      require("nvim-web-devicons")
-    end
+      require "nvim-web-devicons"
+    end,
   },
   {
     "goolord/alpha-nvim",
@@ -152,33 +152,8 @@ return {
       require "configs.fzflua"
     end,
   },
-  { "sindrets/diffview.nvim" },
   {
-    "NeogitOrg/neogit",
-    cmd = "Neogit",
-    dependencies = {
-      "nvim-lua/plenary.nvim",  -- required
-      "sindrets/diffview.nvim", -- optional - Diff integration
-      "ibhagwan/fzf-lua",       -- optional
-    },
-    config = function()
-      require "configs.neogit"
-      dofile(vim.g.base46_cache .. "git")
-      dofile(vim.g.base46_cache .. "neogit")
-    end,
-    keys = {
-      { "<leader>gg", "<cmd>Neogit<cr>", desc = "LazyGit" },
-    },
-  },
-  {
-    'nvim-lua/plenary.nvim'
-  },
-  {
-    "ruifm/gitlinker.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    config = function()
-      require("gitlinker").setup {}
-    end,
+    "nvim-lua/plenary.nvim",
   },
   {
     "folke/trouble.nvim",
@@ -267,8 +242,6 @@ return {
     version = "^1.0.0", -- use version <2.0.0 to avoid breaking changes
     dependencies = { "3rd/image.nvim" },
     -- lazy = false,
-    --
-
     build = ":UpdateRemotePlugins",
     init = function()
       require "configs.molten"
@@ -295,8 +268,8 @@ return {
     end,
   },
   {
-    'MeanderingProgrammer/render-markdown.nvim',
-    dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
+    "MeanderingProgrammer/render-markdown.nvim",
+    dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-tree/nvim-web-devicons" }, -- if you prefer nvim-web-devicons
     ---@module 'render-markdown'
     ---@type render.md.UserConfig
     opts = {},
@@ -322,7 +295,7 @@ return {
     },
     config = function()
       require "configs.codecompanion"
-    end
+    end,
   },
   {
     "lukas-reineke/indent-blankline.nvim",
@@ -331,37 +304,37 @@ return {
     ---@type ibl.config
     opts = {},
     config = function()
-      require("configs.indent-blankline")
-    end
+      require "configs.indent-blankline"
+    end,
   },
   {
-    'pwntester/octo.nvim',
+    "pwntester/octo.nvim",
     cmd = "Octo",
     requires = {
-      'nvim-lua/plenary.nvim',
-      'ibhagwan/fzf-lua',
-      'nvim-tree/nvim-web-devicons',
+      "nvim-lua/plenary.nvim",
+      "ibhagwan/fzf-lua",
+      "nvim-tree/nvim-web-devicons",
     },
     config = function()
       require "configs.octo"
-    end
+    end,
   },
   {
-    'rcarriga/nvim-notify',
+    "rcarriga/nvim-notify",
     config = function()
-      require("notify").setup({})
+      require("notify").setup {}
       vim.api.nvim_create_user_command("RunCommand", function(opts)
         local command = opts.args
         vim.fn.jobstart(command, {
           stdout_buffered = true,
           on_stdout = function(_, data)
             if data then
-              require("notify")(table.concat(data, "\n"))
+              require "notify"(table.concat(data, "\n"))
             end
           end,
           on_stderr = function(_, data)
             if data then
-              require("notify")("Error: " .. table.concat(data, "\n"), "error")
+              require "notify"("Error: " .. table.concat(data, "\n"), "error")
             end
           end,
         })
@@ -369,7 +342,7 @@ return {
 
       -- Example usage:
       -- :RunCommand ls -la
-    end
+    end,
   },
   {
     "gbprod/substitute.nvim",
@@ -390,21 +363,21 @@ return {
       --   `nvim-notify` is only needed, if you want to use the notification view.
       --   If not available, we use `mini` as the fallback
       "rcarriga/nvim-notify",
-    }
+    },
   },
   {
     "folke/twilight.nvim",
     config = function()
-      require("twilight").setup({
+      require("twilight").setup {
         dimming = {
           alpha = 0.25, -- amount of dimming
           -- we try to get the foreground from the highlight groups or fallback color
           color = { "Normal", "#ffffff" },
           term_bg = "#000000", -- if guibg=NONE, this will be used to calculate text color
-          inactive = false,    -- when true, other windows will be fully dimmed (unless they contain the same buffer)
+          inactive = false, -- when true, other windows will be fully dimmed (unless they contain the same buffer)
         },
-        context = 10,          -- amount of lines we will try to show around the current line
-        treesitter = true,     -- use treesitter when available for the filetype
+        context = 10, -- amount of lines we will try to show around the current line
+        treesitter = true, -- use treesitter when available for the filetype
         -- treesitter is used to automatically expand the visible text,
         -- but you can further control the types of nodes that should always be fully expanded
         expand = { -- for treesitter, we we always try to expand to the top-most ancestor with these types
@@ -414,18 +387,50 @@ return {
           "if_statement",
         },
         exclude = {}, -- exclude these filetypes
-      })
-    end
+      }
+    end,
   },
   {
-    'nvim-treesitter/nvim-treesitter-textobjects',
+    "nvim-treesitter/nvim-treesitter-textobjects",
     config = function()
-      require("configs.nvim-treesitter-textobjects")
+      require "configs.nvim-treesitter-textobjects"
     end,
     dependencies = {
-      'nvim-treesitter/nvim-treesitter',
+      "nvim-treesitter/nvim-treesitter",
     },
   },
+  { "microsoft/python-type-stubs" },
+  -- {
+  --   "kitagry/bqls.nvim",
+  --   dependencies = {
+  --     "nvim-neo-tree/neo-tree.nvim",
+  --   },
+  --   config = function()
+  --     require("lspconfig").bqls.setup {
+  --       -- capabilities = require("kitagry.lsp").capabilities,
+  --       init_options = {
+  --         project_id = "focal-elf-631",
+  --       },
+  --     }
+  --   end,
+  -- },
+  -- {
+  --   "nvim-neo-tree/neo-tree.nvim",
+  --   cmd = "Neotree",
+  --   config = function()
+  --     require("neo-tree").setup {
+  --       sources = {
+  --         "filesystem",
+  --         "buffers",
+  --         "git_status",
+  --         "bqls",
+  --       },
+  --       bqls = {
+  --         project_ids = { "focal-elf-631" }, -- default is {"bigquery-public-data"}
+  --       },
+  --     }
+  --   end,
+  -- },
   -- {
   --   'saghen/blink.cmp',
   --   -- optional: provides snippets for the snippet source

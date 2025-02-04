@@ -81,6 +81,14 @@ M.Twilight = {
   }
 }
 
+M.diagnostic = {
+  n = {
+    ["<leader>de"] = { ":lua vim.diagnostic.enable(true, { bufnr = 0 })<CR>", "Enable diagnostic messages in this file" },
+    ["<leader>dd"] = { ":lua vim.diagnostic.enable(false, { bufnr = 0 })<CR>", "Disable diagnostic messages in this file" },
+  }
+}
+
+
 -- User command to run selected Lua code in visual mode
 vim.api.nvim_create_user_command("RunLuaRegion", function()
   local start_line = vim.fn.line("'<")

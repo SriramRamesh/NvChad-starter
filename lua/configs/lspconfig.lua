@@ -6,6 +6,26 @@ local util = require "lspconfig/util"
 local navbuddy = require "nvim-navbuddy"
 
 local lsp_configs = require "lspconfig.configs"
+
+-- ...share/nvim/lazy/nvim-lspconfig/lua/lspconfig/configs.lua:42: attempt to index field 'default_config' (a nil value)
+
+-- # stacktrace:
+-- - ~/.config/nvim/lua/configs/lspconfig.lua:15
+-- - ~/.config/nvim/lua/plugins/init.lua:102 _in_ **config**
+-- - /NvChad/lua/nvchad/autocmds.lua:15
+-- - /fzf-lua/lua/fzf-lua/fzf.lua:308
+
+-- lsp_configs.bqls = {
+--   default_config = {
+--     cmd = { "/Users/sriram/bqls/bqls" },
+--     filetypes = { "sql" },
+--     root_dir = util.root_pattern ".git",
+--     settings = {
+--       project_id = "focal-elf-631",
+--     },
+--   },
+-- }
+
 lsp_configs.pbls = {
   default_config = {
     cmd = { "pbls" },
@@ -13,7 +33,7 @@ lsp_configs.pbls = {
     -- single_file_support = true,
     -- root_dir = function() end,
     root_dir = function(fname)
-      return util.root_pattern ".git" (fname)
+      return util.root_pattern ".git"(fname)
     end,
   },
 }
@@ -46,6 +66,21 @@ local servers = {
   html = {},
   awk_ls = {},
   bashls = {},
+  -- bqls = {
+  --   on_init = function(client)
+  --     client.server_capabilities.documentFormattingProvider = false
+  --     client.server_capabilities.documentFormattingRangeProvider = false
+  --   end,
+  --   on_attach = function(client, bufnr)
+  --     -- Disable formatting for tsserver
+  --     client.server_capabilities.documentFormattingProvider = false
+  --     client.server_capabilities.documentRangeFormattingProvider = false
+  --   end,
+  --   autoformat = false,
+  --   init_options = {
+  --     provideFormatter = false,
+  --   },
+  -- },
   -- protols = {},
   -- pb = {},
   -- protobuf_language_server ={},
@@ -97,14 +132,18 @@ local servers = {
         },
         workspace = {
           -- Make the server aware of Neovim runtime files
-          library = vim.api.nvim_get_runtime_file("", true),
           checkThirdParty = false,
           library = {
+            vim.api.nvim_get_runtime_file("", true),
             vim.env.VIMRUNTIME,
-            --   -- Depending on the usage, you might want to add additional paths here.
+            -- Depending on the usage, you might want to add additional paths here.
             "${3rd}/luv/library",
-            --   -- "${3rd}/busted/library",
+            -- "${3rd}/busted/library",
           },
+          -- didChangeWatchedFiles = {
+          --   dynamicRegistration = false,
+          --   relativePatternSupport = false,
+          -- },
         },
         -- Do not send telemetry data containing a randomized but unique identifier
         telemetry = {
@@ -112,28 +151,103 @@ local servers = {
         },
       },
     },
+    workspace = {
+      didChangeWatchedFiles = {
+        dynamicRegistration = false,
+        relativePatternSupport = false,
+      },
+    },
   },
   -- sqlls = {},
   -- pythonPath = vim.fn.exepath "python3",
   -- venvPath = vim.fn.exepath "pyenv",
   -- venv = "py37moloco",
-
-  pyright = {
-    -- venvPath = "/Users/sriram/.pyenv/versions/",
-    -- venv = "3.11.7",
+  -- NEED: nested "pylsp" dict
+  --   TALK: https://github.com/neovim/nvim-lspconfig/issues/1347
+  --   FIXED: https://neovim.discourse.group/t/pylsp-config-is-not-taken-into-account/1846/2
+  -- pylsp = {
+  --   configurationSources = { "pylint" },
+  --   plugins = {
+  --     -- BAD:NEED: $ paci nuspell
+  --     pylint = { enabled = true }, -- , args = {"--rcfile=pylint.ini", "--disable C0301"}
+  --     -- isort = { enabled = true },
+  --     -- black = { enabled = true, cache_config = true },
+  --     mypy = { enabled = true },
+  --     rope_completion = { enabled = true },
+  --
+  --     -- DEP: pylsp-autoimport
+  --     -- FAIL: autoimport = { enabled = true },
+  --     -- SRC: https://github.com/bageljrkhanofemus/dotfiles/blob/4a8d7e555ca96d0d4b17eda6ed37c68c7ec6a045/dot_config/nvim/lua/configs/lsp.lua
+  --     -- WAIT https://github.com/python-lsp/python-lsp-server/pull/199
+  --     -- NEED: $ pip install . --user
+  --     -- DISABLED:ERR: code errors
+  --     -- rope_autoimport = { enabled = true },
+  --
+  --     pydocstyle = { enabled = false },
+  --     autopep8 = { enabled = false },
+  --     yapf = { enabled = false },
+  --     flake8 = { enabled = false },
+  --     pycodestyle = { enabled = false, maxLineLength = 88 },
+  --     pyflakes = { enabled = false },
+  --   },
+  -- },
+  basedpyright = {
+    venv = "airflow",
+    venvPath = "/Users/sriram/.pyenv/versions",
     settings = {
-      python = {
+      -- pyright = {
+      --   -- Using Ruff's import organizer
+      --   disableOrganizeImports = true
+      -- },
+      basedpyright = {
         analysis = {
-          autoSearchPaths = true,
           typeCheckingMode = "basic",
         },
-        -- venvPath = "/Users/sriram/.pyenv/versions/",
-        -- venv = "py37moloco",
       },
-      -- venvPath = "/Users/sriram/.pyenv/versions/",
-      -- venv = "py37moloco",
     },
   },
+  -- basedpyright = {
+  --   typeCheckingMode = "off",
+  --   diagnosticMode = "off",
+  --   settings = {
+  --     pyright = {
+  --       -- Using Ruff's import organizer
+  --       disableOrganizeImports = true
+  --     },
+  --     basedpyright = {
+  --       analysis = {
+  --         typeCheckingMode = "off",
+  --         diagnosticSeverityOverrides = {
+  --           reportUnusedCallResult = "information",
+  --           reportUnusedExpression = "information",
+  --           reportUnknownMemberType = "none",
+  --           reportUnknownLambdaType = "none",
+  --           reportUnknownParameterType = "none",
+  --           reportMissingParameterType = "none",
+  --           reportUnknownVariableType = "none",
+  --           reportUnknownArgumentType = "none",
+  --           reportAny = "none",
+  --         },
+  --       }
+  --     }
+  --   }
+  -- },
+  -- pyright = {
+  --   -- venvPath = "/Users/sriram/.pyenv/versions/",
+  --   -- venv = "3.11.7",
+  --   settings = {
+  --     python = {
+  --       analysis = {
+  --         autoSearchPaths = true,
+  --         typeCheckingMode = "basic",
+  --       },
+  --       -- venvPath = "/Users/sriram/.pyenv/versions/",
+  --       -- venv = "py37moloco",
+  --     },
+  --     -- venvPath = "/Users/sriram/.pyenv/versions/",
+  --     -- venv = "py37moloco",
+  --   },
+  -- },
   gopls = {
     cmd = { "gopls" },
     filetypes = { "go", "gomod", "gowork", "gotmpl" },
@@ -185,7 +299,9 @@ local fzf_key_map = {
 
 local function on_attach(client, bufnr)
   -- on_attach_nvchad(client, bufnr)
+  -- if client ~= "bqls" then
   navbuddy.attach(client, bufnr)
+  -- end
   for mode, maps in pairs(fzf_key_map) do
     for key, val in pairs(maps) do
       map(mode, key, val[1], { buffer = bufnr, desc = val[2] })

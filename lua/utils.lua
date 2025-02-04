@@ -1,6 +1,6 @@
 ---@diagnostic disable: param-type-mismatch, cast-local-type
 ---
-local notify = require("notify")
+local notify = require "notify"
 local M = {}
 
 M.big_file_max_line = 10000
@@ -96,13 +96,13 @@ end
 -- system function --
 
 function M.getOs()
-  if vim.fn.has("macunix") == 1 then
+  if vim.fn.has "macunix" == 1 then
     return "mac"
   end
-  if vim.fn.has("win32") == 1 then
+  if vim.fn.has "win32" == 1 then
     return "win"
   end
-  if vim.fn.has("wsl") == 1 then
+  if vim.fn.has "wsl" == 1 then
     return "wsl"
   end
   return "linux"
@@ -167,7 +167,7 @@ end
 -- file function --
 
 function M.openFileUnderCursor()
-  local filePath = vim.fn.expand("<cfile>")
+  local filePath = vim.fn.expand "<cfile>"
   if filePath == nil or string.len(filePath) < 1 then
     return
   end
@@ -175,8 +175,8 @@ function M.openFileUnderCursor()
   if string.len(filePath) > 4 and string.sub(filePath, 1, 4) == "http" then
     relatePath = filePath
   else
-    local currentFilePath = vim.fn.expand("%:p")
-    relatePath = string.sub(currentFilePath, 1, string.len(currentFilePath) - string.len(vim.fn.expand("%:t")) - 1)
+    local currentFilePath = vim.fn.expand "%:p"
+    relatePath = string.sub(currentFilePath, 1, string.len(currentFilePath) - string.len(vim.fn.expand "%:t") - 1)
     relatePath = relatePath .. "/" .. filePath
     relatePath = vim.fn.substitute(relatePath, "\\", "/", "")
     relatePath = vim.fn.substitute(relatePath, "\\", "/", "")
@@ -185,7 +185,7 @@ function M.openFileUnderCursor()
 end
 
 function M.openCurrentFile()
-  local filePath = vim.fn.expand("%:p")
+  local filePath = vim.fn.expand "%:p"
   if filePath == nil or string.len(filePath) < 1 then
     return
   end
@@ -204,7 +204,7 @@ function M.get_file_size(file_path)
   local f = io.open(file_path, "rb")
   local size = nil
   if f ~= nil then
-    size = f:seek("end")
+    size = f:seek "end"
     io.close(f)
   end
   return size
@@ -247,7 +247,7 @@ function M.get_default_url_image_name(url)
   end
   -- image extention name
   local image_extention_name = "png"
-  for _, extention_name in ipairs({ "png", "jpg", "jpeg", "gif", "bmp", "svg", "webp" }) do
+  for _, extention_name in ipairs { "png", "jpg", "jpeg", "gif", "bmp", "svg", "webp" } do
     local e_start, _ = string.find(url, string.format("%%.%s$", extention_name))
     if e_start ~= nil then
       image_extention_name = extention_name
@@ -258,8 +258,8 @@ function M.get_default_url_image_name(url)
   local image_name = string.lower(
     string.format(
       "%s-%s-%s.%s",
-      vim.fn.expand("%:t:r"),
-      os.date("%Y%m%d%H%M%S"),
+      vim.fn.expand "%:t:r",
+      os.date "%Y%m%d%H%M%S",
       math.floor((os.clock() % 1) * 1000000),
       image_extention_name
     )
@@ -280,7 +280,7 @@ function M.save_markdown_url_images(input_proxy, start_line, end_line)
   end
 
   -- get image dir path
-  local relative_path = vim.fn.expand("%:h")
+  local relative_path = vim.fn.expand "%:h"
   local image_dir = vim.g.mdip_imgdir or "./image"
   local relative_image_path = relative_path .. "/" .. image_dir
 
@@ -323,7 +323,7 @@ function M.save_markdown_url_images(input_proxy, start_line, end_line)
           local cur_line_content = vim.api.nvim_buf_get_lines(buf_num, line_index, line_index + 1, false)[1]
           local start_pos, end_pos = string.find(cur_line_content, url, 1, true)
           if start_pos == nil or end_pos == nil then
-            vim.notify("Image url position changed")
+            vim.notify "Image url position changed"
             return
           end
           local md_img_text = string.format("![%s](%s)", image_name, image_dir .. "/" .. image_name)
@@ -409,7 +409,7 @@ function M.get_visual_selection_text()
 
   local cursor = vim.api.nvim_win_get_cursor(0)
   local cline, ccol = cursor[1], cursor[2]
-  local vline, vcol = vim.fn.line("v"), vim.fn.col("v")
+  local vline, vcol = vim.fn.line "v", vim.fn.col "v"
 
   local sline, scol
   local eline, ecol
@@ -479,7 +479,7 @@ function M.check_buffer_open(buffer_filetype)
 end
 
 function M.check_quickfix_open()
-  return M.check_buffer_open("qf")
+  return M.check_buffer_open "qf"
 end
 
 -- plugin related function --
@@ -494,15 +494,15 @@ end
 function M.prettier_range_format(bufnr, range_start, range_end)
   local start_index = range_start > 0 and range_start - 1 or 0
   local end_index = range_end > 0 and range_end - 1 or 0
-  if vim.fn.executable("prettier") ~= 1 then
+  if vim.fn.executable "prettier" ~= 1 then
     return
   end
   local format_cmd = {
     "prettier",
     "--parser=" .. vim.o.filetype,
-    "--stdin-filepath=" .. vim.fn.expand("%"),
+    "--stdin-filepath=" .. vim.fn.expand "%",
   }
-  local file_path = vim.fn.expand("%")
+  local file_path = vim.fn.expand "%"
   if file_path == "" then
     return
   end
@@ -538,17 +538,17 @@ function M.toggle_auto_cmp(mode)
     return
   end
   if mode then
-    cmp.setup({
+    cmp.setup {
       completion = {
         autocomplete = { require("cmp.types").cmp.TriggerEvent.TextChanged },
       },
-    })
+    }
   else
-    cmp.setup({
+    cmp.setup {
       completion = {
         autocomplete = false,
       },
-    })
+    }
   end
 end
 
@@ -571,7 +571,7 @@ function M.recoverLostRuntimepath()
 end
 
 function M.visualRange()
-  local first_line = vim.fn.line("v")
+  local first_line = vim.fn.line "v"
   local last_line = vim.fn.getpos(".")[2]
   if first_line > last_line then
     return { last_line, first_line }
@@ -581,102 +581,99 @@ end
 
 -- Function to read lines from a file
 function M.read_lines_from_file(filepath)
-    local file = io.open(filepath, "r")
-    if not file then
-        vim.notify("Could not open file: " .. filepath, vim.log.levels.ERROR)
-        return {}
-    end
+  local file = io.open(filepath, "r")
+  if not file then
+    vim.notify("Could not open file: " .. filepath, vim.log.levels.ERROR)
+    return {}
+  end
 
-    local lines = {}
-    for line in file:lines() do
-        table.insert(lines, line)
-    end
-    file:close()
-    return lines
+  local lines = {}
+  for line in file:lines() do
+    table.insert(lines, line)
+  end
+  file:close()
+  return lines
 end
 
 -- Function to write lines to a file
 function M.write_lines_to_file(filepath, lines)
-    local file = io.open(filepath, "w")
-    if not file then
-        vim.notify("Could not open file for writing: " .. filepath, vim.log.levels.ERROR)
-        return
-    end
+  local file = io.open(filepath, "w")
+  if not file then
+    vim.notify("Could not open file for writing: " .. filepath, vim.log.levels.ERROR)
+    return
+  end
 
-    for _, line in ipairs(lines) do
-        file:write(line .. "\n")
-    end
-    file:close()
+  for _, line in ipairs(lines) do
+    file:write(line .. "\n")
+  end
+  file:close()
 end
 
 -- Function M.to get the path relative to the home directory
 function M.get_home_relative_path(absolute_path)
-    home = vim.fn.expand("~")
-    if absolute_path:sub(1, #home) == home then
-        return absolute_path:gsub("^" .. home, "~")
-    end
-    return absolute_path
+  home = vim.fn.expand "~"
+  if absolute_path:sub(1, #home) == home then
+    return absolute_path:gsub("^" .. home, "~")
+  end
+  return absolute_path
 end
 
 -- Function M.to check if a directory path already exists in the file
 function M.path_exists_in_file(path, filepath)
-    -- vim.print("Checkking ".. path .. "in file" .. filepath)
-    path = path .. ","
-    local file = io.open(filepath, "r")
-    if not file then
-        return false
-    end
-
-    for line in file:lines() do
-        if line == path then
-            file:close()
-            return true
-        end
-    end
-
-    file:close()
+  -- vim.print("Checkking ".. path .. "in file" .. filepath)
+  path = path .. ","
+  local file = io.open(filepath, "r")
+  if not file then
     return false
+  end
+
+  for line in file:lines() do
+    if line == path then
+      file:close()
+      return true
+    end
+  end
+
+  file:close()
+  return false
 end
 
 -- Function to remove the trailing comma from a string
 function M.remove_trailing_comma(str)
-    return str:gsub(",%s*$", "")
+  return str:gsub(",%s*$", "")
 end
 
-
 function M.append_path_to_file(abs_path, target_filepath)
-    -- Convert the absolute path to a path relative to the home directory
-    local home_relative_path = M.get_home_relative_path(abs_path)
+  -- Convert the absolute path to a path relative to the home directory
+  local home_relative_path = M.get_home_relative_path(abs_path)
 
-    -- Check if the path already exists in the file
-    if M.path_exists_in_file(home_relative_path, target_filepath) then
-        notify("Directory path already exists in the file.", vim.log.levels.ERROR)
+  -- Check if the path already exists in the file
+  if M.path_exists_in_file(home_relative_path, target_filepath) then
+    notify("Directory path already exists in the file.", vim.log.levels.ERROR)
+    return
+  end
+
+  -- Ask for confirmation before appending
+  vim.ui.input({
+    prompt = "Add " .. home_relative_path .. " to known projects? (y/n): ",
+    default = "y",
+  }, function(input)
+    if input and input:lower() == "y" then
+      -- Open the target file in append mode and write the home-relative directory path
+      local file = io.open(target_filepath, "a")
+      if not file then
+        notify("Could not open file: " .. target_filepath, vim.log.levels.ERROR)
         return
+      end
+
+      file:write(home_relative_path .. ",\n")
+      file:close()
+
+      notify("Appended directory path to file: " .. target_filepath)
+    else
+      notify("Operation cancelled.", vim.log.levels.INFO)
     end
-
-    -- Ask for confirmation before appending
-    vim.ui.input({
-        prompt = "Add " .. home_relative_path .. " to known projects? (y/n): ",
-        default = "y",
-    }, function(input)
-        if input and input:lower() == "y" then
-            -- Open the target file in append mode and write the home-relative directory path
-            local file = io.open(target_filepath, "a")
-            if not file then
-                notify("Could not open file: " .. target_filepath, vim.log.levels.ERROR)
-                return
-            end
-
-            file:write(home_relative_path .. ",\n")
-            file:close()
-
-            notify("Appended directory path to file: " .. target_filepath)
-        else
-            notify("Operation cancelled.", vim.log.levels.INFO)
-        end
-    end)
-
+  end)
 end
 
 return M
-
