@@ -31,11 +31,11 @@ nomap("n", "<leader>e")
 -- add yours here
 local map = vim.keymap.set
 
-map("n", "<C-tab>", function()
+map("n", "<A-}>", function()
   require("nvchad.tabufline").next()
 end, { desc = "buffer goto next" })
 
-map("n", "<C-S-tab>", function()
+map("n", "<A-{>", function()
   require("nvchad.tabufline").prev()
 end, { desc = "buffer goto prev" })
 
