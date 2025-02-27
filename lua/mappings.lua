@@ -47,6 +47,7 @@ map("i", "<C-S-tab>", function()
   require("nvchad.tabufline").prev()
 end, { desc = "buffer goto prev" })
 
+map("t", "<Esc>", "<C-\\><C-n>", { noremap = true, silent = true })
 
 local M = {}
 
@@ -61,38 +62,63 @@ M.general = {
     ["<leader>ws"] = { "<cmd> split <CR>", "Window split horizontal" },
     ["<leader>bN"] = { "<cmd> enew <CR>", "New buffer" },
     ["<leader>bs"] = { "<cmd> w <CR>", "New buffer" },
-    ["yf"]         = { ":%y+<CR>", "Copy entire file to clipboard" },
-    ['<leader>yp'] = { function() vim.fn.setreg('+', vim.fn.expand('%:p:.')) end, desc = 'Yank file path' },
-    ['<leader>yd'] = { function() vim.fn.setreg('+', vim.fn.expand('%:h')) end, desc = 'Yank directory path' },
-    ['<leader>yf'] = { function() vim.fn.setreg('+', vim.fn.expand('%:t')) end, desc = 'Yank file name' },
-    ['<leader>th'] = { function() require('nvchad.themes').open() end, desc = 'Theme switcher' },
-    ['<leader>jq'] = { "<cmd>%! jq .<CR>", desc = 'JQ formatter' }
-  }
+    ["yf"] = { ":%y+<CR>", "Copy entire file to clipboard" },
+    ["<leader>yp"] = {
+      function()
+        vim.fn.setreg("+", vim.fn.expand "%:p:.")
+      end,
+      desc = "Yank file path",
+    },
+    ["<leader>yd"] = {
+      function()
+        vim.fn.setreg("+", vim.fn.expand "%:h")
+      end,
+      desc = "Yank directory path",
+    },
+    ["<leader>yf"] = {
+      function()
+        vim.fn.setreg("+", vim.fn.expand "%:t")
+      end,
+      desc = "Yank file name",
+    },
+    ["<leader>th"] = {
+      function()
+        require("nvchad.themes").open()
+      end,
+      desc = "Theme switcher",
+    },
+    ["<leader>jq"] = { "<cmd>%! jq .<CR>", desc = "JQ formatter" },
+  },
 }
 
 M.Twilight = {
   n = {
-    ['<leader>T'] = {
+    ["<leader>T"] = {
       function()
         require("twilight").toggle()
       end,
-      desc = 'twilight toggle'
+      desc = "twilight toggle",
     },
-  }
+  },
 }
 
 M.diagnostic = {
   n = {
-    ["<leader>de"] = { ":lua vim.diagnostic.enable(true, { bufnr = 0 })<CR>", "Enable diagnostic messages in this file" },
-    ["<leader>dd"] = { ":lua vim.diagnostic.enable(false, { bufnr = 0 })<CR>", "Disable diagnostic messages in this file" },
-  }
+    ["<leader>de"] = {
+      ":lua vim.diagnostic.enable(true, { bufnr = 0 })<CR>",
+      "Enable diagnostic messages in this file",
+    },
+    ["<leader>dd"] = {
+      ":lua vim.diagnostic.enable(false, { bufnr = 0 })<CR>",
+      "Disable diagnostic messages in this file",
+    },
+  },
 }
-
 
 -- User command to run selected Lua code in visual mode
 vim.api.nvim_create_user_command("RunLuaRegion", function()
-  local start_line = vim.fn.line("'<")
-  local end_line = vim.fn.line("'>")
+  local start_line = vim.fn.line "'<"
+  local end_line = vim.fn.line "'>"
   local lines = vim.fn.getline(start_line, end_line)
   local code = table.concat(lines, "\n")
   load(code)()
@@ -104,7 +130,7 @@ M.lua = {
   },
   v = {
     ["<leader>lx"] = { ":RunLuaRegion<CR>", "Run the region" },
-  }
+  },
 }
 
 M.FzfLua = {
@@ -112,9 +138,12 @@ M.FzfLua = {
     -- find
     ["<leader><leader>"] = { "<cmd>FzfLua files<CR>", "Find files" },
     ["<leader>sp"] = { "<cmd> FzfLua live_grep_glob git_icons=false <CR>", "Live grep glob" },
-    ["<leader>fp"] = { function()
-      require("fzf-lua").files({ cwd = vim.fn.stdpath("config") })
-    end, "Find files in config directory" },
+    ["<leader>fp"] = {
+      function()
+        require("fzf-lua").files { cwd = vim.fn.stdpath "config" }
+      end,
+      "Find files in config directory",
+    },
     ["<leader>sn"] = { "<cmd> FzfLua live_grep_native git_icons=false <CR>", "Live grep glob" },
     ["<leader>sw"] = { "<cmd> FzfLua grep_cword <CR>", "grep current word" },
     ["<leader>sW"] = { "<cmd> FzfLua grep_cWORD <CR>", "grep curent WORD" },
@@ -137,15 +166,18 @@ M.FzfLua = {
     ["<leader>st"] = {
       function()
         require("nvchad.themes").open()
-      end, "Nvchad themes" },
+      end,
+      "Nvchad themes",
+    },
     ["<leader>sd"] = {
       function()
-        local cwd_path = vim.print(vim.fn.expand('%:h'))
-        require("fzf-lua").live_grep_glob({ git_icons = false, cwd = cwd_path })
-      end, "CWD search" },
+        local cwd_path = vim.print(vim.fn.expand "%:h")
+        require("fzf-lua").live_grep_glob { git_icons = false, cwd = cwd_path }
+      end,
+      "CWD search",
+    },
 
     ["<leader>sm"] = { "<cmd> FzfLua marks <CR>", "telescope bookmarks" },
-
   },
 }
 
@@ -166,7 +198,6 @@ M.Gitlinker = {
       "Copy git link for the line",
       opts = { silent = true },
     },
-
   },
 }
 
@@ -174,16 +205,24 @@ M.NeovimProject = {
   n = {
     -- ["<leader>pp"] = { "<cmd> NeovimProjectDiscover <CR>", "Discover Projects" },
     -- ["<leader>pr"] = { "<cmd> NeovimProjectLoadRecent <CR>", "Load Recent Projects" },
-    ["<leader>px"] = { function() require("nvchad.tabufline").closeAllBufs(true) end, "Close all buffers" },
-    ["<leader>po"] = { function() require("nvchad.tabufline").closeAllBufs(false) end, "Close other buffers" },
+    ["<leader>px"] = {
+      function()
+        require("nvchad.tabufline").closeAllBufs(true)
+      end,
+      "Close all buffers",
+    },
+    ["<leader>po"] = {
+      function()
+        require("nvchad.tabufline").closeAllBufs(false)
+      end,
+      "Close other buffers",
+    },
     -- ["<leader>p1"] = { function () require("nvchad.tabufline").closeAllBufs(false) end, "Close other buffers"},
     --   local cwd = vim.fn.getcwd()
     --   vim.opts.
     -- end,"Load Recent Projects" },
-  }
+  },
 }
-
-
 
 for _, mappings in pairs(M) do
   -- print("plugin:", plugin)
@@ -213,7 +252,6 @@ map("i", "jk", "<ESC>")
 map("n", "<leader>;", "<cmd> NvimTreeToggle <CR>", { desc = "nvimtree toggle window" })
 map("n", "<leader>.", "<cmd>NvimTreeFocus<CR>", { desc = "nvimtree focus window" })
 
-
 -- Keymap to manually format the file with Conform
 map("n", "<leader>bf", function()
   require("conform").format { lsp_fallback = true }
@@ -227,8 +265,6 @@ end, { desc = "Format file" })
 --   end,
 --   desc = "Auto-format on save with Conform",
 -- })
-
-
 
 local ts_repeat_move = require "nvim-treesitter.textobjects.repeatable_move"
 
@@ -249,15 +285,15 @@ map({ "n", "x", "o" }, "T", ts_repeat_move.builtin_T_expr, { expr = true })
 
 -- This repeats the last query with always previous direction and to the start of the range.
 map({ "n", "x", "o" }, "<home>", function()
-  ts_repeat_move.repeat_last_move({ forward = false, start = true })
+  ts_repeat_move.repeat_last_move { forward = false, start = true }
 end)
 
 -- This repeats the last query with always next direction and to the end of the range.
 map({ "n", "x", "o" }, "<end>", function()
-  ts_repeat_move.repeat_last_move({ forward = true, start = false })
+  ts_repeat_move.repeat_last_move { forward = true, start = false }
 end)
 -- example: make gitsigns.nvim movement repeatable with ; and , keys.
-local gs = require("gitsigns")
+local gs = require "gitsigns"
 
 -- make sure forward function comes first
 local next_hunk_repeat, prev_hunk_repeat = ts_repeat_move.make_repeatable_move_pair(gs.next_hunk, gs.prev_hunk)
