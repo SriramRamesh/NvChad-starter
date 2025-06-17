@@ -9,6 +9,7 @@ return {
   { "sindrets/diffview.nvim" },
   {
     "NeogitOrg/neogit",
+    version = "2.0.0",
     cmd = "Neogit",
     dependencies = {
       "nvim-lua/plenary.nvim", -- required

@@ -46,24 +46,21 @@ end)
 -- Highlight when yanking (copying) text
 --  Try it with `yap` in normal mode
 --  See `:help vim.highlight.on_yank()`
-vim.api.nvim_create_autocmd('TextYankPost', {
-  desc = 'Highlight when yanking (copying) text',
-  group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
+vim.api.nvim_create_autocmd("TextYankPost", {
+  desc = "Highlight when yanking (copying) text",
+  group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
   callback = function()
     vim.highlight.on_yank()
   end,
 })
 
-vim.api.nvim_command('autocmd BufNewFile,BufRead *.fs,*.fsx,*.fsi,*.fsl,*.fsy set filetype=fsharp')
-
+vim.api.nvim_command "autocmd BufNewFile,BufRead *.fs,*.fsx,*.fsi,*.fsl,*.fsy set filetype=fsharp"
+vim.g.neotest_log_level = 1
 if vim.g.neovide then
   -- Allow clipboard copy paste in neovim
-  vim.keymap.set(
-    { 'n', 'v', 's', 'x', 'o', 'i', 'l', 'c', 't' },
-    '<D-v>',
-    function() vim.api.nvim_paste(vim.fn.getreg('+'), true, -1) end,
-    { noremap = true, silent = true }
-  )
+  vim.keymap.set({ "n", "v", "s", "x", "o", "i", "l", "c", "t" }, "<D-v>", function()
+    vim.api.nvim_paste(vim.fn.getreg "+", true, -1)
+  end, { noremap = true, silent = true })
 
   vim.g.neovide_position_animation_length = 0
   vim.g.neovide_cursor_animation_length = 0.00
@@ -73,6 +70,6 @@ if vim.g.neovide then
   vim.g.neovide_scroll_animation_far_lines = 0
   vim.g.neovide_scroll_animation_length = 0.00
 
-  local home_dir = vim.fn.expand("~")
+  local home_dir = vim.fn.expand "~"
   vim.cmd("cd " .. home_dir)
 end

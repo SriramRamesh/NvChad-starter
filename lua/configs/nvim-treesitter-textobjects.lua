@@ -1,8 +1,8 @@
-require 'nvim-treesitter.configs'.setup {
+require("nvim-treesitter.configs").setup {
   textobjects = {
     lsp_interop = {
       enable = true,
-      border = 'none',
+      border = "none",
       floating_preview_opts = {},
       peek_definition_code = {
         ["<leader>df"] = "@function.outer",
@@ -13,8 +13,8 @@ require 'nvim-treesitter.configs'.setup {
       enable = true,
       set_jumps = true, -- whether to set jumps in the jumplist
       goto_next_start = {
-        ["]m"] = "@function.outer",
-        ["]]"] = { query = "@class.outer", desc = "Next class start" },
+        ["]f"] = "@function.outer",
+        -- ["]]"] = { query = "@class.outer", desc = "Next class start" },
         --
         -- You can use regex matching (i.e. lua pattern) and/or pass a list in a "query" key to group multiple queries.
         ["]o"] = "@loop.*",
@@ -22,21 +22,23 @@ require 'nvim-treesitter.configs'.setup {
         --
         -- You can pass a query group to use query from `queries/<lang>/<query_group>.scm file in your runtime path.
         -- Below example nvim-treesitter's `locals.scm` and `folds.scm`. They also provide highlights.scm and indent.scm.
-        ["]s"] = { query = "@local.scope", query_group = "locals", desc = "Next scope" },
+        ["]]"] = { query = "@local.scope", query_group = "locals", desc = "Next scope" },
         ["]z"] = { query = "@fold", query_group = "folds", desc = "Next fold" },
       },
       goto_next_end = {
-        ["]M"] = "@function.outer",
-        ["]["] = "@class.outer",
+        ["]F"] = "@function.outer",
+        -- ["]["] = "@class.outer",
+        ["]["] = { query = "@local.scope", query_group = "locals", desc = "End of scope" },
       },
       goto_previous_start = {
-        ["[m"] = "@function.outer",
-        ["[["] = "@class.outer",
-        ["[s"] = { query = "@local.scope", query_group = "locals", desc = "Previous scope" },
+        ["[f"] = "@function.outer",
+        -- ["[["] = "@class.outer",
+        ["[["] = { query = "@local.scope", query_group = "locals", desc = "Previous scope" },
       },
       goto_previous_end = {
-        ["[M"] = "@function.outer",
-        ["[]"] = "@class.outer",
+        ["[F"] = "@function.outer",
+        -- ["[]"] = "@class.outer",
+        ["[]"] = { query = "@local.scope", query_group = "locals", desc = "End of previous scope" },
       },
       -- Below will go to either the start or the end, whichever is closer.
       -- Use if you want more granular movements
@@ -46,7 +48,7 @@ require 'nvim-treesitter.configs'.setup {
       },
       goto_previous = {
         ["[d"] = "@conditional.outer",
-      }
+      },
     },
     swap = {
       enable = true,
@@ -82,9 +84,9 @@ require 'nvim-treesitter.configs'.setup {
       -- and should return the mode ('v', 'V', or '<c-v>') or a table
       -- mapping query_strings to modes.
       selection_modes = {
-        ['@parameter.outer'] = 'v', -- charwise
-        ['@function.outer'] = 'V',  -- linewise
-        ['@class.outer'] = '<c-v>', -- blockwise
+        ["@parameter.outer"] = "v", -- charwise
+        ["@function.outer"] = "V", -- linewise
+        ["@class.outer"] = "<c-v>", -- blockwise
       },
       -- If you set this to `true` (default is `false`) then any textobject is
       -- extended to include preceding or succeeding whitespace. Succeeding

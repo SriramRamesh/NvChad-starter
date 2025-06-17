@@ -234,6 +234,94 @@ M.dap = {
   },
 }
 
+M.NvimTreesitterContext = {
+  n = {
+    ["[c"] = {
+      function()
+        require("treesitter-context").go_to_context(vim.v.count1)
+      end,
+      "Jump to context",
+    },
+  },
+}
+
+M.Neotest = {
+  n = {
+    ["<leader>ta"] = {
+      function()
+        require("neotest").run.attach()
+      end,
+      "[t]est [a]ttach",
+    },
+    ["<leader>tf"] = {
+      function()
+        require("neotest").run.run(vim.fn.expand "%")
+      end,
+      "[t]est run [f]ile",
+    },
+    ["<leader>tA"] = {
+      function()
+        require("neotest").run.run(vim.uv.cwd())
+      end,
+      "[t]est [A]ll files",
+    },
+    ["<leader>tS"] = {
+      function()
+        require("neotest").run.run { suite = true }
+      end,
+      "[t]est [S]uite",
+    },
+    ["<leader>tn"] = {
+      function()
+        require("neotest").run.run()
+      end,
+      "[t]est [n]earest",
+    },
+    ["<leader>tl"] = {
+      function()
+        require("neotest").run.run_last()
+      end,
+      "[t]est [l]ast",
+    },
+    ["<leader>ts"] = {
+      function()
+        require("neotest").summary.toggle()
+      end,
+      "[t]est [s]ummary",
+    },
+    ["<leader>to"] = {
+      function()
+        require("neotest").output.open { enter = true, auto_close = true }
+      end,
+      "[t]est [o]utput",
+    },
+    ["<leader>tO"] = {
+      function()
+        require("neotest").output_panel.toggle()
+      end,
+      "[t]est [O]utput panel",
+    },
+    ["<leader>tt"] = {
+      function()
+        require("neotest").run.stop()
+      end,
+      "[t]est [t]erminate",
+    },
+    ["<leader>td"] = {
+      function()
+        require("neotest").run.run { suite = false, strategy = "dap" }
+      end,
+      "Debug nearest test",
+    },
+    ["<leader>tD"] = {
+      function()
+        require("neotest").run.run { vim.fn.expand "%", strategy = "dap" }
+      end,
+      "Debug current file",
+    },
+  },
+}
+
 -- User command to run selected Lua code in visual mode
 vim.api.nvim_create_user_command("RunLuaRegion", function()
   local start_line = vim.fn.line "'<"
