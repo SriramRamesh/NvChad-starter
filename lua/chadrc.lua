@@ -3,7 +3,7 @@
 local options = {
 
   base46 = {
-    theme = "chadracula-evondev", -- default theme
+    theme = "ayu_dark", -- default theme
     hl_add = {
       CurSearch = {
         bg = "orange",

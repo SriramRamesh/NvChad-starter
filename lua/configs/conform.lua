@@ -3,7 +3,8 @@ local options = {
     lua = { "stylua" },
     -- Conform will run multiple formatters sequentially
     -- python = { "ruff_format" },
-    python = { "yapf" }, --, "pylint" },
+    python = { "black" },
+    -- python = { "yapf", "pylint" },
     json = { "jq" },
     -- python = { "isort", "black" },
     -- Use a sub-list to run only the first available formatter
@@ -31,7 +32,7 @@ local options = {
         command = "sqlfluff",
         args = args,
         stdin = true,
-        timeout_ms = 2000, -- Set specific timeout for sqlfluff (15 seconds)
+        -- timeout_ms = 2000, -- Set specific timeout for sqlfluff (15 seconds)
         -- exit_codes = { 0, 1 }, -- it seems to report any misformatted SQL as exit code 1
         cwd = util.root_file {
           ".sqlfluff",
@@ -45,11 +46,16 @@ local options = {
     end,
   },
   -- Set up format-on-save
-  format_on_save = {
-    -- These options will be passed to conform.format()
-    -- timeout_ms = 500,
-    lsp_fallback = true,
-  },
+  format_on_save = function(bufnr)
+    if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+      return
+    end
+    local disable_filetypes = { c = false, cpp = false }
+    return {
+      timeout_ms = 5000,
+      lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
+    }
+  end,
 }
 
 require("conform").setup(options)

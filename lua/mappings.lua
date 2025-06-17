@@ -104,13 +104,132 @@ M.Twilight = {
 
 M.diagnostic = {
   n = {
-    ["<leader>de"] = {
+    ["<leader>De"] = {
       ":lua vim.diagnostic.enable(true, { bufnr = 0 })<CR>",
       "Enable diagnostic messages in this file",
     },
-    ["<leader>dd"] = {
+    ["<leader>Dd"] = {
       ":lua vim.diagnostic.enable(false, { bufnr = 0 })<CR>",
       "Disable diagnostic messages in this file",
+    },
+  },
+}
+
+M.dap = {
+  n = {
+    ["<leader>du"] = {
+      function()
+        require("dapui").toggle {}
+      end,
+      desc = "[d]ap [u]i",
+    },
+    ["<leader>de"] = {
+      function()
+        require("dapui").eval()
+      end,
+      desc = "[d]ap [e]val",
+    },
+    ["<leader>db"] = {
+      function()
+        require("dap").toggle_breakpoint()
+      end,
+      desc = "toggle [d]ebug [b]reakpoint",
+    },
+    ["<leader>dB"] = {
+      function()
+        require("dap").set_breakpoint(vim.fn.input "Breakpoint condition: ")
+      end,
+      desc = "[d]ebug [B]reakpoint",
+    },
+    ["<leader>dc"] = {
+      function()
+        require("dap").continue()
+      end,
+      desc = "[d]ebug [c]ontinue (start here)",
+    },
+    ["<leader>dC"] = {
+      function()
+        require("dap").run_to_cursor()
+      end,
+      desc = "[d]ebug [C]ursor",
+    },
+    ["<leader>dg"] = {
+      function()
+        require("dap").goto_()
+      end,
+      desc = "[d]ebug [g]o to line",
+    },
+    ["<leader>do"] = {
+      function()
+        require("dap").step_over()
+      end,
+      desc = "[d]ebug step [o]ver",
+    },
+    ["<leader>dO"] = {
+      function()
+        require("dap").step_out()
+      end,
+      desc = "[d]ebug step [O]ut",
+    },
+    ["<leader>di"] = {
+      function()
+        require("dap").step_into()
+      end,
+      desc = "[d]ebug [i]nto",
+    },
+    ["<leader>dj"] = {
+      function()
+        require("dap").down()
+      end,
+      desc = "[d]ebug [j]ump down",
+    },
+    ["<leader>dk"] = {
+      function()
+        require("dap").up()
+      end,
+      desc = "[d]ebug [k]ump up",
+    },
+    ["<leader>dl"] = {
+      function()
+        require("dap").run_last()
+      end,
+      desc = "[d]ebug [l]ast",
+    },
+    ["<leader>dp"] = {
+      function()
+        require("dap").pause()
+      end,
+      desc = "[d]ebug [p]ause",
+    },
+    ["<leader>dr"] = {
+      function()
+        require("dap").repl.toggle()
+      end,
+      desc = "[d]ebug [r]epl",
+    },
+    ["<leader>dR"] = {
+      function()
+        require("dap").clear_breakpoints()
+      end,
+      desc = "[d]ebug [R]emove breakpoints",
+    },
+    ["<leader>ds"] = {
+      function()
+        require("dap").session()
+      end,
+      desc = "[d]ebug [s]ession",
+    },
+    ["<leader>dt"] = {
+      function()
+        require("dap").terminate()
+      end,
+      desc = "[d]ebug [t]erminate",
+    },
+    ["<leader>dw"] = {
+      function()
+        require("dap.ui.widgets").hover()
+      end,
+      desc = "[d]ebug [w]idgets",
     },
   },
 }
@@ -224,6 +343,31 @@ M.NeovimProject = {
   },
 }
 
+vim.api.nvim_create_user_command("FormatDisable", function(args)
+  if args.bang then
+    -- FormatDisable! will disable formatting just for this buffer
+    vim.b.disable_autoformat = true
+  else
+    vim.g.disable_autoformat = true
+  end
+end, {
+  desc = "Disable autoformat-on-save",
+  bang = true,
+})
+vim.api.nvim_create_user_command("FormatEnable", function()
+  vim.b.disable_autoformat = false
+  vim.g.disable_autoformat = false
+end, {
+  desc = "Re-enable autoformat-on-save",
+})
+
+M.conform = {
+  n = {
+    ["<leader>bd"] = { ":FormatDisable<CR>", "Disable Formatter" },
+    ["<leader>be"] = { ":FormatEnable<CR>", "Enable Formatter" },
+  },
+}
+
 for _, mappings in pairs(M) do
   -- print("plugin:", plugin)
   for mode, maps in pairs(mappings) do
@@ -237,6 +381,13 @@ for _, mappings in pairs(M) do
   end
 end
 
+map("n", "<leader>W", function()
+  vim.b.disable_autoformat = true
+  vim.cmd "write"
+  vim.defer_fn(function()
+    vim.b.disable_autoformat = false
+  end, 0)
+end, { desc = "Write without autoformatting (one-time)" })
 -- Lua
 -- map("n", "s", require("substitute").operator, {desc = "substitute operator"})
 -- map("n", "ss", require("substitute").line, {desc = "substitute line"})
@@ -251,11 +402,6 @@ map("i", "jk", "<ESC>")
 -- map({ "n", "i", "v" }, "<C-s>", "<cmd> w <cr>")
 map("n", "<leader>;", "<cmd> NvimTreeToggle <CR>", { desc = "nvimtree toggle window" })
 map("n", "<leader>.", "<cmd>NvimTreeFocus<CR>", { desc = "nvimtree focus window" })
-
--- Keymap to manually format the file with Conform
-map("n", "<leader>bf", function()
-  require("conform").format { lsp_fallback = true }
-end, { desc = "Format file" })
 
 -- Auto-format on save
 -- vim.api.nvim_create_autocmd("BufWritePre", {
