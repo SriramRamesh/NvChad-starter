@@ -242,6 +242,10 @@ M.NvimTreesitterContext = {
       end,
       "Jump to context",
     },
+    ["[t"] = {
+      "<cmd>TSContext toggle<CR>",
+      "Toggle TSContext",
+    },
   },
 }
 

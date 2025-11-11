@@ -192,14 +192,17 @@ local servers = {
   --   },
   -- },
   basedpyright = {
-    venv = "airflow",
-    venvPath = "/Users/sriram/.pyenv/versions",
+    -- venvPath = "/Users/sriram/.venv_rmp_infra",
+    -- venv = ".venv_rmp_infra",
     settings = {
       -- pyright = {
       --   -- Using Ruff's import organizer
       --   disableOrganizeImports = true
       -- },
       basedpyright = {
+        -- venvPath = "/Users/sriram/.venv_rmp_infra/",
+        -- venv = ".venv_rmp_infra",
+
         analysis = {
           typeCheckingMode = "basic",
         },
