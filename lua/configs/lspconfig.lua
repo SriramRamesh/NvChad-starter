@@ -7,6 +7,38 @@ local navbuddy = require "nvim-navbuddy"
 
 local lsp_configs = require "lspconfig.configs"
 
+-- ----------------------------
+-- uv venv helper (for basedpyright)
+-- ----------------------------
+local function find_uv_python(root_dir)
+  -- Prefer active venv if you launched nvim from an activated env
+  local venv = vim.env.VIRTUAL_ENV
+  if venv and #venv > 0 then
+    local py = util.path.join(venv, "bin", "python")
+    if util.path.exists(py) then
+      return py
+    end
+  end
+
+  -- Common uv venv locations:
+  -- 1) Project-local ".venv"
+  -- 2) Project-local "venv"
+  -- 3) Project-local ".uv/venv" (some setups)
+  local candidates = {
+    util.path.join(root_dir, ".venv", "bin", "python"),
+    util.path.join(root_dir, "venv", "bin", "python"),
+    util.path.join(root_dir, ".uv", "venv", "bin", "python"),
+  }
+
+  for _, py in ipairs(candidates) do
+    if util.path.exists(py) then
+      return py
+    end
+  end
+
+  return nil
+end
+
 -- ...share/nvim/lazy/nvim-lspconfig/lua/lspconfig/configs.lua:42: attempt to index field 'default_config' (a nil value)
 
 -- # stacktrace:
@@ -192,22 +224,46 @@ local servers = {
   --   },
   -- },
   basedpyright = {
-    -- venvPath = "/Users/sriram/.venv_rmp_infra",
-    -- venv = ".venv_rmp_infra",
+    -- Set pythonPath based on uv venv (and fallbacks)
+    before_init = function(_, config)
+      local root = config.root_dir or vim.loop.cwd()
+      local py = find_uv_python(root)
+      if py then
+        config.settings = config.settings or {}
+        config.settings.python = config.settings.python or {}
+        config.settings.python.pythonPath = py
+      end
+    end,
     settings = {
-      -- pyright = {
-      --   -- Using Ruff's import organizer
-      --   disableOrganizeImports = true
-      -- },
       basedpyright = {
-        -- venvPath = "/Users/sriram/.venv_rmp_infra/",
-        -- venv = ".venv_rmp_infra",
-
         analysis = {
           typeCheckingMode = "basic",
         },
       },
+      python = {
+        analysis = {
+          autoSearchPaths = true,
+          diagnosticMode = "workspace",
+          useLibraryCodeForTypes = true,
+        },
+      },
     },
+    -- -- venvPath = "/Users/sriram/.venv_rmp_infra",
+    -- -- venv = ".venv_rmp_infra",
+    -- settings = {
+    --   -- pyright = {
+    --   --   -- Using Ruff's import organizer
+    --   --   disableOrganizeImports = true
+    --   -- },
+    --   basedpyright = {
+    --     -- venvPath = "/Users/sriram/.venv_rmp_infra/",
+    --     -- venv = ".venv_rmp_infra",
+    --
+    --     analysis = {
+    --       typeCheckingMode = "basic",
+    --     },
+    --   },
+    -- },
   },
   -- basedpyright = {
   --   typeCheckingMode = "off",

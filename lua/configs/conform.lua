@@ -12,7 +12,7 @@ local options = {
     go = { "gofmt", "goimports" },
     css = { "prettier" },
     html = { "prettier" },
-    sql = { "sqlfluff" },
+    -- sql = { "sqlfluff" },
     -- fsharp = { "fantomas" },
   },
   -- Customize formatters
