@@ -1,5 +1,26 @@
 vim.g.base46_cache = vim.fn.stdpath "data" .. "/nvchad/base46/"
 vim.g.mapleader = " "
+
+-- Fix NvChad tabufline + fzf-lua race condition:
+-- fzf-lua's hide profile may wipe a temporary buffer before NvChad's
+-- BufAdd handler runs, causing "Invalid buffer id" errors at lazyload.lua:36:
+--   nvim_buf_get_name(bufs[1])  → patched to return ""
+--   nvim_get_option_value("modified", {buf=bufs[1]}) → patched to return false
+local _orig_buf_get_name = vim.api.nvim_buf_get_name
+vim.api.nvim_buf_get_name = function(buf)
+  if buf ~= 0 and not vim.api.nvim_buf_is_valid(buf) then
+    return ""
+  end
+  return _orig_buf_get_name(buf)
+end
+
+local _orig_get_option_value = vim.api.nvim_get_option_value
+vim.api.nvim_get_option_value = function(name, opts)
+  if opts and opts.buf and opts.buf ~= 0 and not vim.api.nvim_buf_is_valid(opts.buf) then
+    return false
+  end
+  return _orig_get_option_value(name, opts)
+end
 vim.g.maplocalleader = " "
 vim.opt.relativenumber = true
 vim.o.guifont = "JetBrainsMono Nerd Font:h16:#h-slight" -- Source Code Pro:h12:#h-slight

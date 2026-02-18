@@ -348,7 +348,7 @@ M.FzfLua = {
   n = {
     -- find
     ["<leader><leader>"] = { "<cmd>FzfLua files<CR>", "Find files" },
-    ["<leader>sp"] = { "<cmd> FzfLua live_grep_glob git_icons=false <CR>", "Live grep glob" },
+    ["<leader>sp"] = { "<cmd> FzfLua live_grep git_icons=false <CR>", "Live grep glob" },
     ["<leader>fp"] = {
       function()
         require("fzf-lua").files { cwd = vim.fn.stdpath "config" }
@@ -383,7 +383,7 @@ M.FzfLua = {
     ["<leader>sd"] = {
       function()
         local cwd_path = vim.print(vim.fn.expand "%:h")
-        require("fzf-lua").live_grep_glob { git_icons = false, cwd = cwd_path }
+        require("fzf-lua").live_grep { git_icons = false, cwd = cwd_path }
       end,
       "CWD search",
     },

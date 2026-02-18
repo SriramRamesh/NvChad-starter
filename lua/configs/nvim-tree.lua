@@ -18,19 +18,6 @@ local function append_directory_to_file(node)
   utils.append_path_to_file(node.absolute_path, target_filepath)
 end
 
--- Add a custom keybinding to Nvim-Tree to trigger the function
-require("nvim-tree").setup {
-  on_attach = function(bufnr)
-    local api = require "nvim-tree.api"
-
-    -- Define the custom keybinding (e.g., <leader>a)
-    vim.keymap.set("n", "<leader>a", function()
-      local node = api.tree.get_node_under_cursor()
-      append_directory_to_file(node)
-    end, { buffer = bufnr, desc = "Append Directory Path to File" })
-  end,
-}
-
 local function relative_path_under_cursor()
   local node = require("nvim-tree.core").get_explorer():get_node_at_cursor()
   if node == nil then
@@ -247,7 +234,7 @@ require("nvim-tree").setup {
         return
       end
       api.tree.close()
-      fzf.live_grep_glob {
+      fzf.live_grep {
         git_icons = false,
         cwd = relative_path,
         preview = true,
