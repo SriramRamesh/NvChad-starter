@@ -629,28 +629,77 @@ return {
     end,
   },
 
-  -- claude
+  -- dressing.nvim for better UI
   {
-    "greggh/claude-code.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim", -- Required for git operations
-    },
+    "stevearc/dressing.nvim",
+    event = "VeryLazy",
     config = function()
-      require("claude-code").setup {
-        window = {
-          position = "float",
-          float = {
-            width = "90%", -- Take up 90% of the editor width
-            height = "90%", -- Take up 90% of the editor height
-            row = "center", -- Center vertically
-            col = "center", -- Center horizontally
-            relative = "editor",
-            border = "double", -- Use double border style
-          },
-        },
-      }
+      require "configs.dressing"
     end,
   },
+
+  -- claude
+  {
+    "yetone/avante.nvim",
+    event = "VeryLazy",
+    lazy = false,
+    version = false,
+    opts = {
+      -- add any opts here
+    },
+    build = "make",
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      "stevearc/dressing.nvim",
+      "nvim-lua/plenary.nvim",
+      "MunifTanjim/nui.nvim",
+      "nvim-tree/nvim-web-devicons",
+      {
+        "HakonHarnes/img-clip.nvim",
+        event = "VeryLazy",
+        opts = {
+          default = {
+            embed_image_as_base64 = false,
+            prompt_for_file_name = false,
+            drag_and_drop = {
+              insert_mode = true,
+            },
+          },
+        },
+      },
+      {
+        "MeanderingProgrammer/render-markdown.nvim",
+        opts = {
+          file_types = { "markdown", "Avante" },
+        },
+        ft = { "markdown", "Avante" },
+      },
+    },
+    config = function()
+      require "configs.avante"
+    end,
+  },
+  -- {
+  --   "greggh/claude-code.nvim",
+  --   dependencies = {
+  --     "nvim-lua/plenary.nvim", -- Required for git operations
+  --   },
+  --   config = function()
+  --     require("claude-code").setup {
+  --       window = {
+  --         position = "float",
+  --         float = {
+  --           width = "90%", -- Take up 90% of the editor width
+  --           height = "90%", -- Take up 90% of the editor height
+  --           row = "center", -- Center vertically
+  --           col = "center", -- Center horizontally
+  --           relative = "editor",
+  --           border = "double", -- Use double border style
+  --         },
+  --       },
+  --     }
+  --   end,
+  -- },
 
   -- {
   --   'saghen/blink.cmp',
