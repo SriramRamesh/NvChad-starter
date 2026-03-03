@@ -460,6 +460,52 @@ M.conform = {
   },
 }
 
+M.avante = {
+  n = {
+    ["<leader>aa"] = {
+      function()
+        require("avante.api").ask()
+      end,
+      "Avante: Ask",
+    },
+    ["<leader>ar"] = {
+      function()
+        require("avante.api").refresh()
+      end,
+      "Avante: Refresh",
+    },
+    ["<leader>ae"] = {
+      function()
+        require("avante.api").edit()
+      end,
+      "Avante: Edit",
+    },
+    ["<leader>at"] = { "<cmd>AvanteToggle<CR>", "Avante: Toggle" },
+    ["<leader>af"] = { "<cmd>AvanteFocus<CR>", "Avante: Focus" },
+    ["<leader>ac"] = { "<cmd>AvanteChat<CR>", "Avante: Chat" },
+  },
+  v = {
+    ["<leader>aa"] = {
+      function()
+        require("avante.api").ask()
+      end,
+      "Avante: Ask (visual)",
+    },
+    ["<leader>ae"] = {
+      function()
+        require("avante.api").edit()
+      end,
+      "Avante: Edit (visual)",
+    },
+    ["<leader>ar"] = {
+      function()
+        require("avante.api").refresh()
+      end,
+      "Avante: Refresh (visual)",
+    },
+  },
+}
+
 for _, mappings in pairs(M) do
   -- print("plugin:", plugin)
   for mode, maps in pairs(mappings) do

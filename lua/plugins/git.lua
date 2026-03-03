@@ -19,7 +19,9 @@ return {
     config = function()
       -- require "configs.neogit"
       local neogit = require "neogit"
-      neogit.setup {}
+      neogit.setup {
+        auto_show_console = false,
+      }
       dofile(vim.g.base46_cache .. "git")
       dofile(vim.g.base46_cache .. "neogit")
     end,

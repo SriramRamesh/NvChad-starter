@@ -48,25 +48,25 @@ local fzf_key_map = {
   n = {
     ["gD"] = {
       function()
-        require("fzf-lua").lsp_declarations { jump_to_single_result = true, silent = true }
+        require("fzf-lua").lsp_declarations { jump1 = true, silent = true }
       end,
       "Lsp declaration",
     },
     ["gd"] = {
       function()
-        require("fzf-lua").lsp_definitions { jump_to_single_result = true, silent = true }
+        require("fzf-lua").lsp_definitions { jump1 = true, silent = true }
       end,
       "Lsp definitions",
     },
     ["gr"] = {
       function()
-        require("fzf-lua").lsp_references { includeDeclaration = false, jump_to_single_result = true, silent = true }
+        require("fzf-lua").lsp_references { includeDeclaration = false, jump1 = true, silent = true }
       end,
       "Lsp references",
     },
     ["gI"] = {
       function()
-        require("fzf-lua").lsp_implementations { jump_to_single_result = true, silent = true }
+        require("fzf-lua").lsp_implementations { jump1 = true, silent = true }
       end,
       "Lsp implementations",
     },
