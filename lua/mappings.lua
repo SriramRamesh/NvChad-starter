@@ -39,11 +39,11 @@ map("n", "<A-{>", function()
   require("nvchad.tabufline").prev()
 end, { desc = "buffer goto prev" })
 
-map("i", "<C-tab>", function()
+map({ "n", "i" }, "<C-tab>", function()
   require("nvchad.tabufline").next()
 end, { desc = "buffer goto next" })
 
-map("i", "<C-S-tab>", function()
+map({ "n", "i" }, "<C-S-tab>", function()
   require("nvchad.tabufline").prev()
 end, { desc = "buffer goto prev" })
 
@@ -550,7 +550,7 @@ map("n", "<leader>.", "<cmd>NvimTreeFocus<CR>", { desc = "nvimtree focus window"
 --   desc = "Auto-format on save with Conform",
 -- })
 
-local ts_repeat_move = require "nvim-treesitter.textobjects.repeatable_move"
+local ts_repeat_move = require "nvim-treesitter-textobjects.repeatable_move"
 
 -- Repeat movement with ; and ,
 -- ensure ; goes forward and , goes backward regardless of the last direction
@@ -579,9 +579,16 @@ end)
 -- example: make gitsigns.nvim movement repeatable with ; and , keys.
 local gs = require "gitsigns"
 
--- make sure forward function comes first
-local next_hunk_repeat, prev_hunk_repeat = ts_repeat_move.make_repeatable_move_pair(gs.next_hunk, gs.prev_hunk)
--- Or, use `make_repeatable_move` or `set_last_move` functions for more control. See the code for instructions.
-
-map({ "n", "x", "o" }, "]h", next_hunk_repeat)
-map({ "n", "x", "o" }, "[h", prev_hunk_repeat)
+local hunk_move = ts_repeat_move.make_repeatable_move(function(opts)
+  if opts.forward then
+    gs.next_hunk()
+  else
+    gs.prev_hunk()
+  end
+end)
+map({ "n", "x", "o" }, "]h", function()
+  hunk_move { forward = true }
+end)
+map({ "n", "x", "o" }, "[h", function()
+  hunk_move { forward = false }
+end)

@@ -1,103 +1,95 @@
-require("nvim-treesitter.configs").setup {
-  textobjects = {
-    lsp_interop = {
-      enable = true,
-      border = "none",
-      floating_preview_opts = {},
-      peek_definition_code = {
-        ["<leader>df"] = "@function.outer",
-        ["<leader>dF"] = "@class.outer",
-      },
+require("nvim-treesitter-textobjects").setup {
+  select = {
+    lookahead = true,
+    selection_modes = {
+      ["@parameter.outer"] = "v",
+      ["@function.outer"] = "V",
+      ["@class.outer"] = "<c-v>",
     },
-    move = {
-      enable = true,
-      set_jumps = true, -- whether to set jumps in the jumplist
-      goto_next_start = {
-        ["]f"] = "@function.outer",
-        -- ["]]"] = { query = "@class.outer", desc = "Next class start" },
-        --
-        -- You can use regex matching (i.e. lua pattern) and/or pass a list in a "query" key to group multiple queries.
-        ["]o"] = "@loop.*",
-        -- ["]o"] = { query = { "@loop.inner", "@loop.outer" } }
-        --
-        -- You can pass a query group to use query from `queries/<lang>/<query_group>.scm file in your runtime path.
-        -- Below example nvim-treesitter's `locals.scm` and `folds.scm`. They also provide highlights.scm and indent.scm.
-        ["]]"] = { query = "@local.scope", query_group = "locals", desc = "Next scope" },
-        ["]z"] = { query = "@fold", query_group = "folds", desc = "Next fold" },
-      },
-      goto_next_end = {
-        ["]F"] = "@function.outer",
-        -- ["]["] = "@class.outer",
-        ["]["] = { query = "@local.scope", query_group = "locals", desc = "End of scope" },
-      },
-      goto_previous_start = {
-        ["[f"] = "@function.outer",
-        -- ["[["] = "@class.outer",
-        ["[["] = { query = "@local.scope", query_group = "locals", desc = "Previous scope" },
-      },
-      goto_previous_end = {
-        ["[F"] = "@function.outer",
-        -- ["[]"] = "@class.outer",
-        ["[]"] = { query = "@local.scope", query_group = "locals", desc = "End of previous scope" },
-      },
-      -- Below will go to either the start or the end, whichever is closer.
-      -- Use if you want more granular movements
-      -- Make it even more gradual by adding multiple queries and regex.
-      goto_next = {
-        ["]d"] = "@conditional.outer",
-      },
-      goto_previous = {
-        ["[d"] = "@conditional.outer",
-      },
-    },
-    swap = {
-      enable = true,
-      swap_next = {
-        ["<leader>a"] = "@parameter.inner",
-      },
-      swap_previous = {
-        ["<leader>A"] = "@parameter.inner",
-      },
-    },
-    select = {
-      enable = true,
-
-      -- Automatically jump forward to textobj, similar to targets.vim
-      lookahead = true,
-
-      keymaps = {
-        -- You can use the capture groups defined in textobjects.scm
-        ["af"] = "@function.outer",
-        ["if"] = "@function.inner",
-        ["ac"] = "@class.outer",
-        -- You can optionally set descriptions to the mappings (used in the desc parameter of
-        -- nvim_buf_set_keymap) which plugins like which-key display
-        ["ic"] = { query = "@class.inner", desc = "Select inner part of a class region" },
-        -- You can also use captures from other query groups like `locals.scm`
-        ["as"] = { query = "@local.scope", query_group = "locals", desc = "Select language scope" },
-      },
-      -- You can choose the select mode (default is charwise 'v')
-      --
-      -- Can also be a function which gets passed a table with the keys
-      -- * query_string: eg '@function.inner'
-      -- * method: eg 'v' or 'o'
-      -- and should return the mode ('v', 'V', or '<c-v>') or a table
-      -- mapping query_strings to modes.
-      selection_modes = {
-        ["@parameter.outer"] = "v", -- charwise
-        ["@function.outer"] = "V", -- linewise
-        ["@class.outer"] = "<c-v>", -- blockwise
-      },
-      -- If you set this to `true` (default is `false`) then any textobject is
-      -- extended to include preceding or succeeding whitespace. Succeeding
-      -- whitespace has priority in order to act similarly to eg the built-in
-      -- `ap`.
-      --
-      -- Can also be a function which gets passed a table with the keys
-      -- * query_string: eg '@function.inner'
-      -- * selection_mode: eg 'v'
-      -- and should return true or false
-      include_surrounding_whitespace = true,
-    },
+    include_surrounding_whitespace = true,
+  },
+  move = {
+    set_jumps = true,
   },
 }
+
+local select = require "nvim-treesitter-textobjects.select"
+local move = require "nvim-treesitter-textobjects.move"
+local swap = require "nvim-treesitter-textobjects.swap"
+local repeatable = require "nvim-treesitter-textobjects.repeatable_move"
+
+local map = vim.keymap.set
+
+-- Selection
+map({ "x", "o" }, "af", function()
+  select.select_textobject("@function.outer", "textobjects")
+end, { desc = "Select around function" })
+map({ "x", "o" }, "if", function()
+  select.select_textobject("@function.inner", "textobjects")
+end, { desc = "Select inside function" })
+map({ "x", "o" }, "ac", function()
+  select.select_textobject("@class.outer", "textobjects")
+end, { desc = "Select around class" })
+map({ "x", "o" }, "ic", function()
+  select.select_textobject("@class.inner", "textobjects")
+end, { desc = "Select inner part of a class region" })
+map({ "x", "o" }, "as", function()
+  select.select_textobject("@local.scope", "locals")
+end, { desc = "Select language scope" })
+
+-- Movement (repeatable with ; / ,)
+local next_start = repeatable.make_repeatable_move(move.goto_next_start)
+local next_end = repeatable.make_repeatable_move(move.goto_next_end)
+local prev_start = repeatable.make_repeatable_move(move.goto_previous_start)
+local prev_end = repeatable.make_repeatable_move(move.goto_previous_end)
+local goto_next = repeatable.make_repeatable_move(move.goto_next)
+local goto_previous = repeatable.make_repeatable_move(move.goto_previous)
+
+map({ "n", "x", "o" }, "]f", function()
+  next_start("@function.outer", "textobjects")
+end, { desc = "Next function start" })
+map({ "n", "x", "o" }, "]F", function()
+  next_end("@function.outer", "textobjects")
+end, { desc = "Next function end" })
+map({ "n", "x", "o" }, "[f", function()
+  prev_start("@function.outer", "textobjects")
+end, { desc = "Previous function start" })
+map({ "n", "x", "o" }, "[F", function()
+  prev_end("@function.outer", "textobjects")
+end, { desc = "Previous function end" })
+
+map({ "n", "x", "o" }, "]o", function()
+  next_start({ "@loop.inner", "@loop.outer" }, "textobjects")
+end, { desc = "Next loop" })
+
+map({ "n", "x", "o" }, "]]", function()
+  next_start("@local.scope", "locals")
+end, { desc = "Next scope" })
+map({ "n", "x", "o" }, "[[", function()
+  prev_start("@local.scope", "locals")
+end, { desc = "Previous scope" })
+map({ "n", "x", "o" }, "][", function()
+  next_end("@local.scope", "locals")
+end, { desc = "End of scope" })
+map({ "n", "x", "o" }, "[]", function()
+  prev_end("@local.scope", "locals")
+end, { desc = "End of previous scope" })
+
+map({ "n", "x", "o" }, "]z", function()
+  next_start("@fold", "folds")
+end, { desc = "Next fold" })
+
+map({ "n", "x", "o" }, "]d", function()
+  goto_next("@conditional.outer", "textobjects")
+end, { desc = "Next conditional" })
+map({ "n", "x", "o" }, "[d", function()
+  goto_previous("@conditional.outer", "textobjects")
+end, { desc = "Previous conditional" })
+
+-- Swap
+map("n", "<leader>a", function()
+  swap.swap_next "@parameter.inner"
+end, { desc = "Swap next parameter" })
+map("n", "<leader>A", function()
+  swap.swap_previous "@parameter.inner"
+end, { desc = "Swap previous parameter" })

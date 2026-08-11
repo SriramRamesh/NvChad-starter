@@ -1,0 +1,45 @@
+# Changelog
+
+## 2026-05-04 — Migrate nvim-treesitter to `main` branch (Neovim 0.12 compat)
+
+### Why
+Neovim 0.12.1 throws `treesitter.lua:196: attempt to call method 'range' (a nil value)` whenever `nvim-treesitter-context` parses a buffer. Root cause: `nvim-treesitter`'s `master` branch is frozen and explicitly does not support Neovim 0.12 (per its own README: "Neovim 0.10 or 0.11; Neovim 0.12 is not supported"). The query files it ships are incompatible with 0.12's stricter query engine, and the breakage cascades through anything that walks language trees (treesitter-context, hover windows, injection-based highlighting). Reddit thread confirming same root cause:
+https://www.reddit.com/r/neovim/comments/1s9y00d/
+
+NvChad v2.5's base config already uses the `main`-branch APIs (`vim.treesitter.start()` via FileType autocmd, `require("nvim-treesitter").install(...)` for parser installs, `:TSInstallAll` user command). It just doesn't pin the branch, so users land on the default `master` and break.
+
+### Files changed
+
+**`lua/plugins/init.lua`**
+- `nvim-treesitter`: added `branch = "main"`. Removed `opts.highlight`, `opts.indent`, `opts.incremental_selection` (no module system on `main`). Kept `opts.ensure_installed` (consumed by NvChad's `:TSInstallAll` command).
+- `nvim-treesitter-textobjects`: added `branch = "main"`.
+
+**`lua/configs/nvim-treesitter-textobjects.lua`** — full rewrite
+- Old API: `require("nvim-treesitter.configs").setup{ textobjects = { ... } }` with declarative keymap tables under `select`/`move`/`swap`.
+- New API: `require("nvim-treesitter-textobjects").setup{...}` for global options only (`select.lookahead`, `select.selection_modes`, `select.include_surrounding_whitespace`, `move.set_jumps`); each keymap is now an explicit `vim.keymap.set` calling `select.select_textobject(...)`, `move.goto_*(...)`, or `swap.swap_*(...)`.
+- Movement keymaps wrapped in `repeatable.make_repeatable_move(...)` so `;` / `,` continue to repeat motions.
+- `["]o"] = "@loop.*"` (regex-style) replaced with explicit list `{ "@loop.inner", "@loop.outer" }` — `main` accepts string-or-list, not patterns.
+- **Dropped: `lsp_interop` / `peek_definition_code`** (`<leader>df`, `<leader>dF`). The `lsp_interop` module does not exist on `main`. If the peek-definition feature is wanted back, it needs a manual implementation (open a floating window, run `vim.lsp.buf_request` on `textDocument/definition`, render the response).
+
+**`lua/mappings.lua`**
+- Line 553: `require("nvim-treesitter.textobjects.repeatable_move")` → `require("nvim-treesitter-textobjects.repeatable_move")`. Function names (`repeat_last_move_next`, `builtin_f_expr`, etc.) are unchanged; only the module path moved.
+
+### Behavior changes / things to know
+
+- **Highlighting** is now started by NvChad's `FileType *` autocmd calling `vim.treesitter.start()` per buffer. No global `highlight = { enable = true }` toggle.
+- **Indent module gone.** `main` does not provide treesitter indent; `:set indentexpr=...` falls back to filetype indent. If a specific language indents poorly, install a dedicated indent plugin or set `indentexpr=v:lua.require'nvim-treesitter'.indentexpr()` if the package adds a helper (it currently doesn't on `main`).
+- **`incremental_selection` gone** (the `<C-space>` / `<bs>` keymap). Closest replacements: `nvim-treesitter/nvim-treesitter-incremental-selection` (separate plugin), or `mini.ai`. Not added in this change.
+- **Parser installs** now go through `:TSInstall <lang>` or `:TSInstallAll` (NvChad's user command, reads `opts.ensure_installed`). On first launch after this change, `lazy.nvim`'s `build = ":TSUpdate | TSInstallAll"` step will install everything in the list.
+
+### Post-update steps (user must run once)
+
+1. Open Neovim. Lazy.nvim will detect the `branch = "main"` change and check out `main` for both plugins.
+2. `:Lazy sync` — to ensure the lockfile updates and plugins fully refresh.
+3. `:TSUninstall all` then `:TSInstall all` (or just `:TSInstallAll`) — old `master`-built parser `.so` files may not match the queries that ship with `main`; reinstalling avoids subtle highlight breakage.
+4. Restart nvim. The `treesitter.lua:196` error should be gone.
+
+### Requirements
+
+- `tree-sitter` CLI ≥ 0.26.1 (already in `~/.config/nix-darwin/packages.nix` line 6).
+- A C compiler (Xcode CLT on macOS, present).
+- Neovim 0.12.0+ (have 0.12.1).

@@ -6,9 +6,8 @@ package.path = package.path .. ";" .. vim.fn.expand "$HOME" .. "/.luarocks/share
 return {
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "main",
     opts = {
-      highlight = { enable = true },
-      indent = { enable = true },
       ensure_installed = {
         "bash",
         "c",
@@ -40,15 +39,6 @@ return {
         "xml",
         "yaml",
         "fsharp",
-      },
-      incremental_selection = {
-        enable = true,
-        keymaps = {
-          init_selection = "<C-space>",
-          node_incremental = "<C-space>",
-          scope_incremental = false,
-          node_decremental = "<bs>",
-        },
       },
     },
   },
@@ -422,6 +412,7 @@ return {
   },
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
+    branch = "main",
     config = function()
       require "configs.nvim-treesitter-textobjects"
     end,
